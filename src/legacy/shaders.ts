@@ -1,5 +1,5 @@
 /**
- * AI Motion - WebGL2 animated border with AI-style glow effects
+ * Agent Aura Glow - WebGL2 animated border with stream glow effects
  *
  * @author Simon<gaomeng1900@gmail.com>
  * @license MIT

@@ -7,7 +7,7 @@
  */
 import { BurningFire, type BurningFireOptions } from './BurningFire'
 import { FireBorder, type FireBorderOptions } from './FireBorder'
-import { Motion, type MotionOptions } from './Motion'
+import { Glow, type GlowOptions } from './Glow'
 import { MotionBorder, type MotionBorderOptions } from './MotionBorder'
 import type { AttachOptions, TargetRef } from './dom'
 
@@ -21,8 +21,8 @@ export const aura = {
 	border(target: TargetRef, options?: AttachOptions<MotionBorderOptions>) {
 		return MotionBorder.attach(target, options)
 	},
-	motion(target: TargetRef, options?: MotionOptions) {
-		return Motion.attach(target, options)
+	glow(target: TargetRef, options?: GlowOptions) {
+		return Glow.attach(target, options)
 	},
 }
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-i18n-page="home">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +10,7 @@
 		/>
 		<meta
 			name="description"
-			content="Zero-dependency WebGL2 effects for Agent UIs: AI glow borders, burning fire frames, and overclock-life flames."
+			content="Zero-dependency WebGL2 effects for Agent UIs: stream glow masks, neural energy borders, burning fire, and overclock-life flames."
 		/>
 		<style>
 			:root {
@@ -63,7 +63,8 @@
 				flex-wrap: wrap;
 			}
 
-			.links a {
+			.links a,
+			.links button {
 				color: var(--text);
 				text-decoration: none;
 				font-size: 13px;
@@ -71,6 +72,11 @@
 				border: 1px solid var(--line);
 				border-radius: 999px;
 				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.links button {
+				cursor: pointer;
+				font: inherit;
 			}
 
 			.usage {
@@ -154,7 +160,7 @@
 				box-shadow: 0 0 24px rgba(255, 80, 20, 0.12);
 			}
 
-			#motion-card {
+			#glow-card {
 				border-color: rgba(120, 170, 255, 0.35);
 				box-shadow: 0 0 24px rgba(90, 120, 255, 0.12);
 			}
@@ -215,18 +221,20 @@
 		<nav class="nav">
 			<div class="brand">Agent Aura</div>
 			<div class="links">
-				<a href="#motion-preview">Motion Glow</a>
-				<a href="#neural-preview">Motion Border</a>
-				<a href="#fire-preview">Fire Border</a>
-				<a href="#burn-preview">Burning Fire</a>
+				<a href="#glow-preview" data-i18n="nav.glow">Glow</a>
+				<a href="#neural-preview" data-i18n="nav.border">Border</a>
+				<a href="#fire-preview" data-i18n="nav.fire">Fire</a>
+				<a href="#burn-preview" data-i18n="nav.burning">Burning</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
 				<a href="https://github.com/wangmiaozero/agent-aura" target="_blank">GitHub</a>
 				<a href="https://www.npmjs.com/package/agent-aura" target="_blank">npm</a>
+				<button type="button" data-lang-toggle>EN</button>
 			</div>
 		</nav>
 
 		<header class="hero">
 			<h1>AGENT<br />AURA</h1>
-			<p class="lead">
+			<p class="lead" data-i18n="home.lead">
 				给 Agent UI 用的零依赖 WebGL2 特效库：流光遮罩、神经光场边框、火焰燃烧框和超频燃烧生命态。
 			</p>
 			<div class="install">npm install agent-aura</div>
@@ -234,7 +242,7 @@
 				<pre>
 import { aura } from 'agent-aura'
 
-aura.motion('#card')
+aura.glow('#card')
 aura.border('#card')
 aura.fire('#card')
 aura.burning('#card')</pre>
@@ -242,48 +250,60 @@ aura.burning('#card')</pre>
 		</header>
 
 		<section class="gallery">
-			<article class="preview" id="motion-preview">
-				<div class="card" id="motion-card">
-					<div class="tag">Motion · Glow</div>
-					<h2>AI Motion</h2>
-					<p>原项目能力完整保留：WebGL2 彩色流光边框，适合 Agent 工作台、对话框、卡片高亮。</p>
-					<code>aura.motion('#motion-card')</code>
+			<article class="preview" id="glow-preview">
+				<div class="card" id="glow-card">
+					<div class="tag" data-i18n="home.glowTag">Stream · Mask</div>
+					<h2 data-i18n="home.glowTitle">GLOW</h2>
+					<p data-i18n="home.glowDesc">
+						WebGL2 彩色流光边框，适合 Agent 工作台、对话框、卡片高亮。
+					</p>
+					<code>aura.glow('#glow-card')</code>
 				</div>
 			</article>
 
 			<article class="preview" id="neural-preview">
 				<div class="card" id="neural-card">
-					<div class="tag">Neural · Field</div>
-					<h2>MOTION BORDER</h2>
-					<p>连续 Shader 光场沿圆角边框流动，光向外溢出。适合思考中、推理中、Agent 活跃态。</p>
+					<div class="tag" data-i18n="home.borderTag">Neural · Field</div>
+					<h2 data-i18n="home.borderTitle">MOTION BORDER</h2>
+					<p data-i18n="home.borderDesc">
+						连续 Shader 光场沿圆角边框流动，光向外溢出。适合思考中、推理中、Agent 活跃态。
+					</p>
 					<code>aura.border('#neural-card')</code>
 				</div>
 			</article>
 
 			<article class="preview" id="fire-preview">
 				<div class="card" id="fire-card">
-					<div class="tag">Fire Border</div>
-					<h2>BURNING BORDER</h2>
-					<p>火焰沿 UI 边框持续燃烧，带核心、外焰和火星飞溅。适合危险模式、执行中、点火态。</p>
+					<div class="tag" data-i18n="home.fireTag">Fire Border</div>
+					<h2 data-i18n="home.fireTitle">BURNING BORDER</h2>
+					<p data-i18n="home.fireDesc">
+						火焰沿 UI 边框持续燃烧，带核心、外焰和火星飞溅。适合危险模式、执行中、点火态。
+					</p>
 					<code>aura.fire('#fire-card')</code>
 				</div>
 			</article>
 
 			<article class="preview" id="burn-preview">
 				<div class="card" id="burn-card">
-					<div class="tag">Agent Overclock</div>
-					<h2>AGENT BURNING</h2>
-					<p>更猛的火焰 + 烟雾 + 背景热浪，像 Agent 正在燃烧寿命硬扛推理。</p>
+					<div class="tag" data-i18n="home.burnTag">Agent Overclock</div>
+					<h2 data-i18n="home.burnTitle">AGENT BURNING</h2>
+					<p data-i18n="home.burnDesc">
+						更猛的火焰 + 烟雾 + 背景热浪，像 Agent 正在燃烧寿命硬扛推理。
+					</p>
 					<code>aura.burning('#burn-card')</code>
 				</div>
 			</article>
 		</section>
 
 		<script type="module">
+			import { detectLang, initI18n, messages } from './i18n.js'
+
+			initI18n()
+
 			try {
 				const { aura } = await import('./build/index.js')
 
-				aura.motion('#motion-card', {
+				aura.glow('#glow-card', {
 					mode: 'dark',
 					borderRadius: 22,
 					borderWidth: 6,
@@ -308,7 +328,7 @@ aura.burning('#card')</pre>
 			} catch (error) {
 				console.error(error)
 				const install = document.querySelector('.install')
-				if (install) install.textContent = '请先运行 npm run build，再刷新页面'
+				if (install) install.textContent = messages[detectLang()]['home.buildHint']
 			}
 		</script>
 	</body>

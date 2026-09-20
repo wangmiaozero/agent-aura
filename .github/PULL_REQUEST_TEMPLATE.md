@@ -4,7 +4,7 @@
 
 ## Test plan
 
-- [ ] Motion glow still runs
+- [ ] Glow still runs
 - [ ] MotionBorder energy field tracks the card
 - [ ] FireBorder tracks the target
 - [ ] BurningFire smoke / sparks look correct

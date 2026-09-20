@@ -1,10 +1,10 @@
 {
     "name": "agent-aura",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": false,
     "license": "MIT",
     "type": "module",
-    "description": "Zero-dependency WebGL2 effects for Agent UIs: AI glow borders, neural motion frames, burning fire, and overclock-life flames.",
+    "description": "Zero-dependency WebGL2 effects for Agent UIs: stream glow masks, neural energy borders, burning fire, and overclock-life flames.",
     "keywords": [
         "webgl",
         "webgl2",
@@ -36,7 +36,8 @@
         }
     },
     "files": [
-        "build"
+        "build",
+        "docs"
     ],
     "repository": {
         "type": "git",

@@ -26,7 +26,7 @@ npm start
 ## Pull Requests
 
 1. Fork and create a feature branch
-2. Verify Motion / FireBorder / BurningFire in the browser
+2. Verify Glow / FireBorder / BurningFire in the browser
 3. Use conventional commits (`feat:`, `fix:`, `docs:`)
 4. Fill out the PR template
 

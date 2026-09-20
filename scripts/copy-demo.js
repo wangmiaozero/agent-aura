@@ -11,7 +11,9 @@ mkdirSync(join(dest, 'build'), { recursive: true })
 
 const htmlFiles = [
 	'index.html',
-	'motion.html',
+	'docs.html',
+	'i18n.js',
+	'glow.html',
 	'motion-border.html',
 	'fire-border.html',
 	'burning-fire.html',

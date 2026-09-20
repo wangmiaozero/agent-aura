@@ -1,5 +1,5 @@
 /**
- * Agent Aura - WebGL2 animated border with AI-style glow effects
+ * Agent Aura - WebGL2 stream glow mask
  *
  * @author wangmiao<tuziling84@gmail.com>
  * @license MIT
@@ -19,14 +19,14 @@ import vertexShaderSource from './gl/shaders/vertex.glsl'
 export type CSSRgbString =
 	`rgb(${number}, ${number}, ${number})` | `rgb(${number},${number},${number})`
 
-export type MotionOptions = {
+export type GlowOptions = {
 	/**
-	 * The width of the motion element.
+	 * The width of the glow element.
 	 * @default 600
 	 */
 	width?: number
 	/**
-	 * The height of the motion element.
+	 * The height of the glow element.
 	 * @default 600
 	 */
 	height?: number
@@ -116,14 +116,14 @@ function parseColor(colorStr: string): [number, number, number] {
 	return [parseInt(r) / 255, parseInt(g) / 255, parseInt(b) / 255]
 }
 
-export class Motion {
+export class Glow {
 	readonly element: HTMLElement
 
 	private canvas: HTMLCanvasElement
 	private options: Required<
-		Pick<MotionOptions, 'ratio' | 'borderWidth' | 'glowWidth' | 'borderRadius'>
+		Pick<GlowOptions, 'ratio' | 'borderWidth' | 'glowWidth' | 'borderRadius'>
 	> &
-		Omit<MotionOptions, 'ratio' | 'borderWidth' | 'glowWidth' | 'borderRadius'>
+		Omit<GlowOptions, 'ratio' | 'borderWidth' | 'glowWidth' | 'borderRadius'>
 	private running = false
 	private disposed = false
 	private startTime = 0
@@ -132,10 +132,10 @@ export class Motion {
 	private glr!: GLResources
 	private observer?: ResizeObserver
 
-	static attach(target: TargetRef, options: MotionOptions = {}): Motion {
+	static attach(target: TargetRef, options: GlowOptions = {}): Glow {
 		const el = resolveTarget(target)
 		ensurePositioned(el)
-		const motion = new Motion({
+		const glow = new Glow({
 			...options,
 			styles: {
 				position: 'absolute',
@@ -145,13 +145,13 @@ export class Motion {
 				...options.styles,
 			},
 		})
-		el.appendChild(motion.element)
-		motion.autoResize(el)
-		motion.start()
-		return motion
+		el.appendChild(glow.element)
+		glow.autoResize(el)
+		glow.start()
+		return glow
 	}
 
-	constructor(options: MotionOptions = {}) {
+	constructor(options: GlowOptions = {}) {
 		this.options = {
 			width: options.width ?? 600,
 			height: options.height ?? 600,
@@ -182,7 +182,7 @@ export class Motion {
 	}
 
 	start(): void {
-		if (this.disposed) throw new Error('Motion instance has been disposed.')
+		if (this.disposed) throw new Error('Glow instance has been disposed.')
 		if (this.running) return
 		if (!this.glr) {
 			console.error('WebGL resources are not initialized.')
@@ -218,7 +218,7 @@ export class Motion {
 	}
 
 	pause() {
-		if (this.disposed) throw new Error('Motion instance has been disposed.')
+		if (this.disposed) throw new Error('Glow instance has been disposed.')
 		this.running = false
 		if (this.rafId !== null) cancelAnimationFrame(this.rafId)
 	}
@@ -241,7 +241,7 @@ export class Motion {
 	}
 
 	resize(width: number, height: number, ratio?: number): void {
-		if (this.disposed) throw new Error('Motion instance has been disposed.')
+		if (this.disposed) throw new Error('Glow instance has been disposed.')
 
 		this.options.width = width
 		this.options.height = height
@@ -321,7 +321,7 @@ export class Motion {
 	}
 
 	fadeIn(): Promise<void> {
-		if (this.disposed) throw new Error('Motion instance has been disposed.')
+		if (this.disposed) throw new Error('Glow instance has been disposed.')
 
 		return new Promise<void>((resolve, reject) => {
 			const animation = this.canvas.animate(
@@ -338,7 +338,7 @@ export class Motion {
 	}
 
 	fadeOut(): Promise<void> {
-		if (this.disposed) throw new Error('Motion instance has been disposed.')
+		if (this.disposed) throw new Error('Glow instance has been disposed.')
 
 		return new Promise<void>((resolve, reject) => {
 			const animation = this.canvas.animate(

@@ -84,11 +84,11 @@
 		</div>
 
 		<script type="module">
-			import { Motion } from './src/Motion'
+			import { Glow } from './src/Glow'
 
 			// dark side
 
-			const motion = new Motion({
+			const glow = new Glow({
 				ratio: 2,
 				mode: 'dark',
 				borderWidth: 16,
@@ -103,14 +103,14 @@
 				},
 			})
 
-			document.getElementById('dark').getElementsByClassName('inner')[0].appendChild(motion.element)
+			document.getElementById('dark').getElementsByClassName('inner')[0].appendChild(glow.element)
 
-			motion.start()
+			glow.start()
 
-			window.motion = motion
+			window.glowFx = glow
 
 			// light mode
-			const lightMotion = new Motion({
+			const lightGlow = new Glow({
 				ratio: 2,
 				mode: 'light',
 				borderWidth: 16,
@@ -128,11 +128,11 @@
 			document
 				.getElementById('light')
 				.getElementsByClassName('inner')[0]
-				.appendChild(lightMotion.element)
+				.appendChild(lightGlow.element)
 
-			lightMotion.start()
+			lightGlow.start()
 
-			window.lightMotion = lightMotion
+			window.lightGlow = lightGlow
 		</script>
 	</body>
 </html>

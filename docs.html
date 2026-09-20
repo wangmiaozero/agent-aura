@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="zh-CN" data-i18n-page="docs">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura — API</title>
+		<link
+			rel="icon"
+			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>"
+		/>
+		<meta
+			name="description"
+			content="agent-aura API: aura.glow / border / fire / burning options and lifecycle."
+		/>
+		<style>
+			:root {
+				--bg: #070708;
+				--text: #f6f1ea;
+				--muted: rgba(255, 255, 255, 0.58);
+				--line: rgba(255, 140, 60, 0.22);
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				min-height: 100%;
+				background:
+					radial-gradient(circle at 50% 0%, rgba(255, 90, 20, 0.16), transparent 36%),
+					radial-gradient(circle at 80% 80%, rgba(80, 40, 255, 0.12), transparent 30%), #070708;
+				color: var(--text);
+				font-family: Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+			}
+
+			body {
+				padding: 28px 20px 80px;
+			}
+
+			.nav,
+			.wrap {
+				max-width: 1180px;
+				margin: 0 auto;
+			}
+
+			.nav {
+				margin-bottom: 28px;
+				display: flex;
+				justify-content: space-between;
+				gap: 16px;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+
+			.brand {
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				font-size: 13px;
+				color: #ffb07a;
+			}
+
+			.links {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+			}
+
+			.links a,
+			.links button {
+				color: var(--text);
+				text-decoration: none;
+				font-size: 13px;
+				padding: 8px 12px;
+				border: 1px solid var(--line);
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.links button {
+				cursor: pointer;
+				font: inherit;
+			}
+
+			h1 {
+				margin: 0 0 12px;
+				font-size: clamp(36px, 7vw, 64px);
+				line-height: 0.92;
+				letter-spacing: -0.06em;
+				background: linear-gradient(180deg, #fff 0%, #ffd2ad 42%, #ff7a32 100%);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+			}
+
+			.lead {
+				max-width: 720px;
+				color: var(--muted);
+				line-height: 1.8;
+				font-size: 16px;
+			}
+
+			.layout {
+				display: grid;
+				grid-template-columns: 220px minmax(0, 1fr);
+				gap: 32px;
+				margin-top: 36px;
+			}
+
+			.toc {
+				position: sticky;
+				top: 20px;
+				align-self: start;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			.toc a {
+				color: var(--muted);
+				text-decoration: none;
+				font-size: 13px;
+			}
+
+			.toc a:hover {
+				color: #ffd2ad;
+			}
+
+			h2 {
+				margin: 42px 0 12px;
+				font-size: 22px;
+				letter-spacing: -0.03em;
+			}
+
+			h3 {
+				margin: 28px 0 10px;
+				font-size: 16px;
+				color: #ffd2ad;
+			}
+
+			p,
+			li {
+				color: var(--muted);
+				line-height: 1.75;
+				font-size: 14px;
+			}
+
+			pre {
+				margin: 14px 0 22px;
+				padding: 16px 18px;
+				border-radius: 14px;
+				background: rgba(0, 0, 0, 0.28);
+				border: 1px solid var(--line);
+				overflow-x: auto;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 13px;
+				line-height: 1.7;
+				color: #ffd2ad;
+			}
+
+			code {
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 12.5px;
+				color: #ffcda6;
+			}
+
+			p code,
+			li code,
+			td code {
+				padding: 1px 6px;
+				border-radius: 6px;
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 12px 0 24px;
+				font-size: 13px;
+			}
+
+			th,
+			td {
+				text-align: left;
+				vertical-align: top;
+				padding: 10px 12px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			}
+
+			th {
+				color: #ffb07a;
+				font-weight: 600;
+			}
+
+			td {
+				color: var(--muted);
+			}
+
+			@media (max-width: 860px) {
+				.layout {
+					grid-template-columns: 1fr;
+				}
+
+				.toc {
+					position: static;
+					flex-direction: row;
+					flex-wrap: wrap;
+					gap: 10px 16px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<a class="brand" href="./">Agent Aura</a>
+			<div class="links">
+				<a href="./" data-i18n="nav.demo">演示</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<a
+					data-github-docs
+					href="https://github.com/wangmiaozero/agent-aura/blob/main/docs/api.zh-CN.md"
+					target="_blank"
+					data-i18n="nav.githubDocs"
+					>GitHub 文档</a
+				>
+				<a href="https://www.npmjs.com/package/agent-aura" target="_blank">npm</a>
+				<button type="button" data-lang-toggle>EN</button>
+			</div>
+		</nav>
+
+		<header class="wrap">
+			<h1>API</h1>
+			<p class="lead" data-i18n-html="docs.lead">
+				四种特效同一套生命周期：<code>attach</code> 自动挂 canvas 并播放，<code>pause</code> /
+				<code>start</code> 控制循环，卸载时 <code>dispose()</code>。完整 Markdown 版在仓库
+				<code>docs/api.zh-CN.md</code>。
+			</p>
+		</header>
+
+		<div class="wrap layout">
+			<nav class="toc">
+				<a href="#install" data-i18n="docs.toc.install">安装</a>
+				<a href="#aura" data-i18n="docs.toc.aura">aura</a>
+				<a href="#lifecycle" data-i18n="docs.toc.lifecycle">生命周期</a>
+				<a href="#mount" data-i18n="docs.toc.mount">Canvas 挂载</a>
+				<a href="#glow" data-i18n="docs.toc.glow">glow</a>
+				<a href="#border" data-i18n="docs.toc.border">border</a>
+				<a href="#fire" data-i18n="docs.toc.fire">fire</a>
+				<a href="#burning" data-i18n="docs.toc.burning">burning</a>
+				<a href="#framework" data-i18n="docs.toc.framework">框架</a>
+			</nav>
+
+			<article>
+				<h2 id="install" data-i18n="docs.install">安装</h2>
+				<pre>npm install agent-aura</pre>
+				<pre>
+import { aura } from 'agent-aura'
+
+aura.glow('#hero')
+aura.border('#card')
+aura.fire('#card')
+aura.burning('#agent')</pre>
+				<p data-i18n-html="docs.install.cdn">
+					CDN：<code>https://unpkg.com/agent-aura/build/agent-aura.min.js</code>，全局
+					<code>AgentAura</code>。包是 ESM，没有 CJS。浏览器需要 WebGL2。
+				</p>
+
+				<h2 id="aura">aura</h2>
+				<pre>
+aura.glow(target, options?: GlowOptions): Glow
+aura.border(target, options?: AttachOptions&lt;MotionBorderOptions&gt;): MotionBorder
+aura.fire(target, options?: AttachOptions&lt;FireBorderOptions&gt;): FireBorder
+aura.burning(target, options?: AttachOptions&lt;BurningFireOptions&gt;): BurningFire</pre>
+				<p data-i18n-html="docs.aura.p">
+					<code>target</code> 是选择器或 <code>HTMLElement</code>。等价于对应 class 的
+					<code>attach()</code>。找不到节点抛 <code>agent-aura: target not found</code>。
+				</p>
+
+				<h2 id="lifecycle" data-i18n="docs.lifecycle">生命周期</h2>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.method">方法</th>
+							<th data-i18n="docs.th.behavior">行为</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>start()</code></td>
+							<td data-i18n-html="docs.lifecycle.start">
+								<code>attach()</code> 已调用，一般不用再调
+							</td>
+						</tr>
+						<tr>
+							<td><code>pause()</code></td>
+							<td data-i18n="docs.lifecycle.pause">停 rAF，canvas 留着</td>
+						</tr>
+						<tr>
+							<td><code>dispose()</code></td>
+							<td data-i18n="docs.lifecycle.dispose">
+								释放 WebGL / Observer / canvas，幂等。之后再 start/pause 会抛错
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<pre>
+const fx = aura.fire('#card')
+fx.pause()
+fx.start()
+fx.dispose()</pre>
+
+				<h2 id="mount" data-i18n="docs.mount">Canvas 挂载</h2>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.api">API</th>
+							<th data-i18n="docs.th.where">挂到哪</th>
+							<th data-i18n="docs.th.pos">定位</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>glow</code></td>
+							<td data-i18n="docs.mount.glow">target 内部</td>
+							<td data-i18n-html="docs.mount.glowPos"><code>absolute; inset: 0</code></td>
+						</tr>
+						<tr>
+							<td><code>border</code></td>
+							<td data-i18n-html="docs.mount.border">
+								<code>container</code> → 非 body parent → <code>document.body</code>
+							</td>
+							<td data-i18n-html="docs.mount.borderPos">
+								容器内 absolute，否则 fixed，外扩 <code>glowPadding</code>
+							</td>
+						</tr>
+						<tr>
+							<td><code>fire</code> / <code>burning</code></td>
+							<td data-i18n-html="docs.mount.fire">
+								<code>container</code> 或 <code>document.body</code>
+							</td>
+							<td data-i18n="docs.mount.firePos">铺满容器或视口，粒子沿 target 边框</td>
+						</tr>
+					</tbody>
+				</table>
+				<pre>
+aura.border('#card', { container: '#stage' })
+aura.fire('#card', { container: '#stage' })</pre>
+				<p data-i18n-html="docs.mount.note">
+					卡片在 overflow / transform / 滚动容器里时必须传 <code>container</code>。
+				</p>
+
+				<h2 id="glow">aura.glow</h2>
+				<p data-i18n-html="docs.glow.p">
+					流光遮罩。canvas 插在 target 里面。暗底用 <code>mode: 'dark'</code>。
+				</p>
+				<pre>
+aura.glow('#hero', {
+  mode: 'dark',
+  borderRadius: 16,
+  borderWidth: 6,
+  glowWidth: 140,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>mode</code></td>
+							<td><code>'light'</code></td>
+							<td data-i18n-html="docs.glow.mode"><code>'dark' | 'light'</code>，没有两全样式</td>
+						</tr>
+						<tr>
+							<td><code>colors</code></td>
+							<td data-i18n="docs.glow.colors">蓝 / 紫 / 橙 / 黄</td>
+							<td data-i18n-html="docs.glow.colorsNote">必须 4 个 <code>rgb(r, g, b)</code></td>
+						</tr>
+						<tr>
+							<td><code>borderWidth</code></td>
+							<td><code>8</code></td>
+							<td data-i18n="docs.glow.borderWidth">实线边宽</td>
+						</tr>
+						<tr>
+							<td><code>glowWidth</code></td>
+							<td><code>200</code></td>
+							<td data-i18n="docs.glow.glowWidth">光晕宽</td>
+						</tr>
+						<tr>
+							<td><code>borderRadius</code></td>
+							<td><code>8</code></td>
+							<td data-i18n="docs.glow.radius">圆角</td>
+						</tr>
+						<tr>
+							<td><code>ratio</code></td>
+							<td>DPR</td>
+							<td data-i18n-html="docs.glow.ratio">可 &lt; 1 降分辨率</td>
+						</tr>
+					</tbody>
+				</table>
+				<p data-i18n-html="docs.glow.extra">
+					额外方法：<code>resize</code>、<code>autoResize</code>、<code>fadeIn()</code> /
+					<code>fadeOut()</code>（300ms Promise）。内部约 32fps。没有 <code>container</code>。
+				</p>
+
+				<h2 id="border">aura.border</h2>
+				<p data-i18n="docs.border.p">神经光场绕圆角边框流动。</p>
+				<pre>
+aura.border('#neural-card', {
+  container: '#neural-preview',
+  glowPadding: 64,
+  glowWidth: 90,
+  borderWidth: 2,
+  borderRadius: 22,
+  speed: 1.2,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>glowPadding</code></td>
+							<td><code>110</code></td>
+							<td data-i18n="docs.border.pad">canvas 相对 target 外扩</td>
+						</tr>
+						<tr>
+							<td><code>borderWidth</code></td>
+							<td><code>2.2</code></td>
+							<td data-i18n="docs.border.bw">光带宽度</td>
+						</tr>
+						<tr>
+							<td><code>glowWidth</code></td>
+							<td><code>115</code></td>
+							<td data-i18n="docs.border.gw">外溢宽度</td>
+						</tr>
+						<tr>
+							<td><code>borderRadius</code></td>
+							<td><code>28</code></td>
+							<td data-i18n="docs.border.radius">跟卡片圆角对齐</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.border.speed">时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>zIndex</code></td>
+							<td><code>10</code></td>
+							<td data-i18n="docs.border.z">canvas 层级</td>
+						</tr>
+					</tbody>
+				</table>
+				<p data-i18n-html="docs.border.extra">
+					<code>setTarget</code> / <code>setContainer</code> 可热切换跟随节点。
+				</p>
+
+				<h2 id="fire">aura.fire</h2>
+				<p data-i18n="docs.fire.p">火焰沿边框烧。内部强制无烟、无热浪。</p>
+				<pre>
+aura.fire('#fire-card', {
+  container: '#fire-preview',
+  particleCount: 800,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>particleCount</code></td>
+							<td><code>1300</code></td>
+							<td data-i18n="docs.fire.count">越大越密、越吃 GPU</td>
+						</tr>
+						<tr>
+							<td><code>padding</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.fire.padding">边框采样内缩</td>
+						</tr>
+						<tr>
+							<td><code>zIndex</code></td>
+							<td><code>10</code></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><code>onFrame</code></td>
+							<td>—</td>
+							<td data-i18n-html="docs.fire.frame"><code>(time: number) =&gt; void</code>，秒</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2 id="burning">aura.burning</h2>
+				<p data-i18n="docs.burning.p">大火 + 烟雾 + 背景热浪。</p>
+				<pre>
+aura.burning('#burn-card', {
+  container: '#burn-preview',
+  particleCount: 1800,
+  smokeCount: 300,
+  glow: true,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>particleCount</code></td>
+							<td><code>2200</code></td>
+							<td data-i18n="docs.burning.count">火焰粒子</td>
+						</tr>
+						<tr>
+							<td><code>smokeCount</code></td>
+							<td><code>520</code></td>
+							<td data-i18n-html="docs.burning.smoke"><code>0</code> 关烟</td>
+						</tr>
+						<tr>
+							<td><code>glow</code></td>
+							<td><code>true</code></td>
+							<td data-i18n="docs.burning.glow">背景热浪</td>
+						</tr>
+						<tr>
+							<td><code>padding</code></td>
+							<td><code>2</code></td>
+							<td data-i18n="docs.burning.padding">边框采样内缩</td>
+						</tr>
+					</tbody>
+				</table>
+				<p data-i18n-html="docs.burning.note">
+					笔记本建议把粒子降到 600–1000，烟 150–300。离屏 <code>pause()</code>。
+				</p>
+
+				<h2 id="framework" data-i18n="docs.framework">框架</h2>
+				<pre>
+// React
+useEffect(() => {
+  const fx = aura.border(el)
+  return () => fx.dispose()
+}, [])
+
+// Vue 3
+onMounted(() => { fx = aura.fire(card.value) })
+onBeforeUnmount(() => fx?.dispose())</pre>
+				<p data-i18n-html="docs.framework.p">
+					class 导出：<code>Glow</code>、<code>MotionBorder</code>、<code>FireBorder</code>、
+					<code>BurningFire</code>。<code>new X()</code> 不会自动 append / start，要用
+					<code>X.attach()</code>。
+				</p>
+			</article>
+		</div>
+		<script type="module">
+			import { initI18n } from './i18n.js'
+
+			initI18n()
+		</script>
+	</body>
+</html>
