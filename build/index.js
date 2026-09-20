@@ -1,4 +1,4 @@
-/*! agent-aura v1.0.0 | MIT | https://github.com/wangmiaozero/agent-aura */
+/*! agent-aura v1.0.1 | MIT | https://github.com/wangmiaozero/agent-aura */
 //#region src/dom.ts
 function e(e, t = "target") {
 	if (e instanceof HTMLElement) return e;
@@ -16,7 +16,7 @@ function n(e) {
 //#region src/brand.ts
 var r = !1;
 function i(e = "agent-aura") {
-	r || (r = !0, console.log(`%c✨ ${e} 1.0.0 ✨`, "background: linear-gradient(90deg, #39b6ff, #bd45fb, #ff5733, #ff7b22); color: white; text-shadow: 0 0 2px rgba(0, 0, 0, 0.2); font-weight: bold; font-size: 1em; padding: 2px 12px; border-radius: 6px;"));
+	r || (r = !0, console.log(`%c✨ ${e} 1.0.1 ✨`, "background: linear-gradient(90deg, #39b6ff, #bd45fb, #ff5733, #ff7b22); color: white; text-shadow: 0 0 2px rgba(0, 0, 0, 0.2); font-weight: bold; font-size: 1em; padding: 2px 12px; border-radius: 6px;"));
 }
 //#endregion
 //#region src/gl/program.ts
@@ -709,7 +709,7 @@ var F = class t {
 		}, this.canvas = document.createElement("canvas"), this.options.classNames && (this.canvas.className = this.options.classNames), this.options.styles && Object.assign(this.canvas.style, this.options.styles), this.canvas.style.display = "block", this.canvas.style.transformOrigin = "center", this.canvas.style.pointerEvents = "none", this.element = this.canvas, this.setupGL(), this.options.skipGreeting || this.greet();
 	}
 	start() {
-		if (this.disposed) throw Error("Motion instance has been disposed.");
+		if (this.disposed) throw Error("Glow instance has been disposed.");
 		if (this.running) return;
 		if (!this.glr) {
 			console.error("WebGL resources are not initialized.");
@@ -728,7 +728,7 @@ var F = class t {
 		this.rafId = requestAnimationFrame(e);
 	}
 	pause() {
-		if (this.disposed) throw Error("Motion instance has been disposed.");
+		if (this.disposed) throw Error("Glow instance has been disposed.");
 		this.running = !1, this.rafId !== null && cancelAnimationFrame(this.rafId);
 	}
 	dispose() {
@@ -738,7 +738,7 @@ var F = class t {
 		t && e.deleteVertexArray(t), n && e.deleteBuffer(n), r && e.deleteBuffer(r), e.deleteProgram(i), this.observer && this.observer.disconnect(), this.canvas.remove();
 	}
 	resize(e, t, n) {
-		if (this.disposed) throw Error("Motion instance has been disposed.");
+		if (this.disposed) throw Error("Glow instance has been disposed.");
 		if (this.options.width = e, this.options.height = t, n && (this.options.ratio = n), !this.running) return;
 		let { gl: r, program: i, vao: a, positionBuffer: o, uvBuffer: s, uResolution: c } = this.glr, l = n ?? this.options.ratio ?? window.devicePixelRatio ?? 1, u = Math.max(1, Math.floor(e * l)), d = Math.max(1, Math.floor(t * l));
 		this.canvas.style.width = `${e}px`, this.canvas.style.height = `${t}px`, (this.canvas.width !== u || this.canvas.height !== d) && (this.canvas.width = u, this.canvas.height = d), r.viewport(0, 0, this.canvas.width, this.canvas.height), this.checkGLError(r, "resize: after viewport setup");
@@ -760,7 +760,7 @@ var F = class t {
 		}), this.observer.observe(e);
 	}
 	fadeIn() {
-		if (this.disposed) throw Error("Motion instance has been disposed.");
+		if (this.disposed) throw Error("Glow instance has been disposed.");
 		return new Promise((e, t) => {
 			let n = this.canvas.animate([{
 				opacity: 0,
@@ -777,7 +777,7 @@ var F = class t {
 		});
 	}
 	fadeOut() {
-		if (this.disposed) throw Error("Motion instance has been disposed.");
+		if (this.disposed) throw Error("Glow instance has been disposed.");
 		return new Promise((e, t) => {
 			let n = this.canvas.animate([{
 				opacity: 1,
@@ -994,9 +994,9 @@ var F = class t {
 	border(e, t) {
 		return z.attach(e, t);
 	},
-	motion(e, t) {
+	glow(e, t) {
 		return F.attach(e, t);
 	}
 };
 //#endregion
-export { O as BurningFire, k as FireBorder, F as Motion, z as MotionBorder, B as aura, B as default };
+export { O as BurningFire, k as FireBorder, F as Glow, z as MotionBorder, B as aura, B as default };

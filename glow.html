@@ -3,14 +3,14 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Agent Aura · Motion Glow</title>
+		<title>Agent Aura · Glow</title>
 		<link
 			rel="icon"
 			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌈</text></svg>"
 		/>
 		<meta
 			name="description"
-			content="WebGL2 animated border with AI-style glow effects. Zero dependencies, modern browsers only."
+			content="WebGL2 animated border with stream glow effects. Zero dependencies, modern browsers only."
 		/>
 		<style>
 			:root {
@@ -277,8 +277,8 @@
 			<div class="content">
 				<h1 class="title">Agent Aura</h1>
 				<p class="tagline">
-					<span class="glamorous">Glamorous</span> WebGL2 animated mask with AI-style border & glow
-					effects. ✨Make your Agent pretty.
+					<span class="glamorous">Glamorous</span> WebGL2 animated mask with stream glow effects.
+					✨Make your Agent pretty.
 				</p>
 
 				<div class="features">
@@ -314,7 +314,7 @@
 		</div>
 
 		<script type="module">
-			import { Motion } from './build/index.js'
+			import { Glow } from './build/index.js'
 
 			const themeToggle = document.getElementById('themeToggle')
 			const toggleCircle = themeToggle.querySelector('.toggle-circle')
@@ -330,9 +330,9 @@
 				document.documentElement.setAttribute('data-theme', theme)
 				localStorage.setItem('theme', theme)
 				toggleCircle.textContent = theme === 'dark' ? '☀️' : '🌙'
-				if (window.motion) {
-					window.motion.dispose()
-					createMotion(theme)
+				if (window.glowFx) {
+					window.glowFx.dispose()
+					createGlow(theme)
 				}
 			}
 
@@ -341,8 +341,8 @@
 				setTheme(current === 'dark' ? 'light' : 'dark')
 			})
 
-			function createMotion(mode = 'light') {
-				const motion = new Motion({
+			function createGlow(mode = 'light') {
+				const glow = new Glow({
 					width: document.documentElement.clientWidth,
 					height: document.documentElement.clientHeight,
 					mode,
@@ -352,17 +352,17 @@
 						zIndex: '1',
 					},
 				})
-				document.body.appendChild(motion.element)
+				document.body.appendChild(glow.element)
 				window.addEventListener('resize', () =>
-					motion.resize(document.documentElement.clientWidth, document.documentElement.clientHeight)
+					glow.resize(document.documentElement.clientWidth, document.documentElement.clientHeight)
 				)
-				motion.start()
-				motion.fadeIn()
-				window.motion = motion
+				glow.start()
+				glow.fadeIn()
+				window.glowFx = glow
 			}
 
 			initTheme()
-			createMotion(document.documentElement.getAttribute('data-theme'))
+			createGlow(document.documentElement.getAttribute('data-theme'))
 		</script>
 	</body>
 </html>
