@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura · Burning Life</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				background: radial-gradient(
+					circle at 50% 45%,
+					rgba(120, 18, 8, 0.24) 0%,
+					rgba(20, 5, 5, 0.75) 38%,
+					#030303 100%
+				);
+				font-family: Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+			}
+
+			body {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.site-nav {
+				position: fixed;
+				top: 18px;
+				left: 18px;
+				z-index: 20;
+				display: flex;
+				gap: 8px;
+			}
+
+			.site-nav a {
+				color: #ffcda6;
+				text-decoration: none;
+				font-size: 12px;
+				padding: 6px 10px;
+				border-radius: 999px;
+				border: 1px solid rgba(255, 120, 25, 0.28);
+				background: rgba(0, 0, 0, 0.35);
+			}
+
+			.agent-card {
+				position: relative;
+				z-index: 2;
+				width: min(820px, calc(100vw - 72px));
+				min-height: 460px;
+				border-radius: 28px;
+				overflow: hidden;
+				background: linear-gradient(180deg, rgba(18, 11, 11, 0.95), rgba(8, 7, 8, 0.97));
+				border: 1px solid rgba(255, 120, 30, 0.72);
+				box-shadow:
+					0 0 8px rgba(255, 90, 20, 0.75),
+					0 0 22px rgba(255, 60, 0, 0.45),
+					0 0 60px rgba(255, 40, 0, 0.25),
+					0 0 120px rgba(255, 20, 0, 0.15),
+					inset 0 0 24px rgba(255, 100, 30, 0.06);
+				animation: cardPulse 1.7s ease-in-out infinite;
+			}
+
+			@keyframes cardPulse {
+				0%,
+				100% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.003);
+				}
+			}
+
+			.agent-card::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+				background:
+					radial-gradient(circle at 50% 0%, rgba(255, 120, 20, 0.18), transparent 38%),
+					radial-gradient(circle at 50% 100%, rgba(255, 40, 0, 0.08), transparent 40%);
+				mix-blend-mode: screen;
+			}
+
+			.scan-line {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: -20%;
+				height: 28%;
+				pointer-events: none;
+				background: linear-gradient(
+					180deg,
+					rgba(255, 255, 255, 0),
+					rgba(255, 120, 50, 0.09),
+					rgba(255, 255, 255, 0)
+				);
+				filter: blur(6px);
+				animation: scanMove 3.5s linear infinite;
+			}
+
+			@keyframes scanMove {
+				0% {
+					transform: translateY(-40%);
+				}
+				100% {
+					transform: translateY(420%);
+				}
+			}
+
+			.content {
+				position: relative;
+				z-index: 3;
+				padding: 42px 42px 34px;
+				color: #fff;
+			}
+
+			.topbar {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 16px;
+				flex-wrap: wrap;
+			}
+
+			.tag {
+				display: inline-flex;
+				align-items: center;
+				gap: 10px;
+				height: 34px;
+				padding: 0 14px;
+				border-radius: 999px;
+				border: 1px solid rgba(255, 110, 20, 0.24);
+				background: rgba(255, 80, 0, 0.08);
+				color: #ffae73;
+				font-size: 12px;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+			}
+
+			.tag-dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: #ff7a22;
+				box-shadow:
+					0 0 8px #ff7a22,
+					0 0 18px #ff3c00;
+				animation: dotBlink 0.75s infinite alternate;
+			}
+
+			@keyframes dotBlink {
+				0% {
+					opacity: 0.65;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+
+			.status {
+				color: rgba(255, 255, 255, 0.62);
+				font-size: 13px;
+			}
+
+			.status strong {
+				color: #ff9052;
+			}
+
+			h1 {
+				margin: 28px 0 8px;
+				font-size: clamp(42px, 8vw, 84px);
+				line-height: 0.95;
+				letter-spacing: -3px;
+				background: linear-gradient(180deg, #fff 0%, #ffd2ad 32%, #ff9d57 60%, #ff5f22 100%);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+			}
+
+			.subtitle {
+				margin: 0;
+				max-width: 650px;
+				color: rgba(255, 255, 255, 0.58);
+				line-height: 1.9;
+				font-size: 15px;
+			}
+
+			.metrics {
+				display: grid;
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				gap: 14px;
+				margin-top: 28px;
+			}
+
+			.metric {
+				border-radius: 16px;
+				padding: 16px;
+				background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 120, 20, 0.04));
+				border: 1px solid rgba(255, 120, 20, 0.12);
+			}
+
+			.metric-label {
+				color: rgba(255, 255, 255, 0.45);
+				font-size: 12px;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+			}
+
+			.metric-value {
+				margin-top: 10px;
+				color: #ffd4b5;
+				font-size: 28px;
+				font-weight: 700;
+			}
+
+			.life-wrap {
+				margin-top: 26px;
+				border-radius: 18px;
+				padding: 16px 16px 18px;
+				background: linear-gradient(180deg, rgba(255, 80, 20, 0.06), rgba(255, 255, 255, 0.02));
+				border: 1px solid rgba(255, 110, 25, 0.14);
+			}
+
+			.life-head {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10px;
+				font-size: 13px;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			.life-bar {
+				position: relative;
+				height: 18px;
+				border-radius: 999px;
+				overflow: hidden;
+				background: rgba(255, 255, 255, 0.06);
+				border: 1px solid rgba(255, 120, 20, 0.14);
+			}
+
+			.life-fill {
+				position: absolute;
+				inset: 0 auto 0 0;
+				width: 62%;
+				border-radius: 999px;
+				background: linear-gradient(
+					90deg,
+					#ffebbd 0%,
+					#ffc773 12%,
+					#ff913d 30%,
+					#ff5a1f 55%,
+					#e72300
+				);
+			}
+
+			.life-note {
+				margin-top: 12px;
+				color: rgba(255, 255, 255, 0.46);
+				line-height: 1.8;
+				font-size: 13px;
+			}
+
+			.cta-row {
+				display: flex;
+				gap: 12px;
+				margin-top: 28px;
+				flex-wrap: wrap;
+			}
+
+			.btn {
+				height: 42px;
+				padding: 0 18px;
+				border-radius: 12px;
+				border: 1px solid rgba(255, 120, 25, 0.24);
+				background: linear-gradient(180deg, rgba(255, 110, 30, 0.14), rgba(255, 40, 0, 0.08));
+				color: #ffcda6;
+				display: inline-flex;
+				align-items: center;
+			}
+
+			.warning {
+				margin-top: 18px;
+				color: #ff8b57;
+				font-size: 12px;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+			}
+
+			@media (max-width: 720px) {
+				.content {
+					padding: 28px 22px 24px;
+				}
+				.metrics {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="site-nav">
+			<a href="./index.html">Agent Aura</a>
+			<a href="./motion.html">Motion</a>
+			<a href="./motion-border.html">Neural</a>
+			<a href="./fire-border.html">Fire Border</a>
+		</nav>
+
+		<div class="agent-card" id="agent-card">
+			<div class="scan-line"></div>
+			<div class="content">
+				<div class="topbar">
+					<div class="tag">
+						<span class="tag-dot"></span>
+						AGENT LIFE OVERCLOCK
+					</div>
+					<div class="status">状态：<strong>燃烧生命推理中</strong></div>
+				</div>
+				<h1>AGENT<br />BURNING</h1>
+				<p class="subtitle">
+					更猛烈的火焰边框，像 Agent 正在压榨算力、燃烧寿命。通过
+					<code>BurningFire</code> 直接挂到任意 DOM 节点。
+				</p>
+				<div class="metrics">
+					<div class="metric">
+						<div class="metric-label">Inference Heat</div>
+						<div class="metric-value" id="heatValue">97%</div>
+					</div>
+					<div class="metric">
+						<div class="metric-label">Life Burn Rate</div>
+						<div class="metric-value" id="burnValue">4.8x</div>
+					</div>
+					<div class="metric">
+						<div class="metric-label">Cognitive Overload</div>
+						<div class="metric-value">CRITICAL</div>
+					</div>
+				</div>
+				<div class="life-wrap">
+					<div class="life-head">
+						<span>生命剩余</span>
+						<strong id="lifeText">62%</strong>
+					</div>
+					<div class="life-bar">
+						<div class="life-fill" id="lifeFill"></div>
+					</div>
+					<div class="life-note">
+						Agent 正在持续消耗自身寿命维持高强度执行。火焰越猛烈，任务越极端。
+					</div>
+				</div>
+				<div class="cta-row">
+					<div class="btn">Ignite Core</div>
+					<div class="btn">Overclock Agent</div>
+				</div>
+				<div class="warning">Warning · This agent is consuming its own lifetime</div>
+			</div>
+		</div>
+
+		<script type="module">
+			import { aura } from './build/index.js'
+
+			const lifeFill = document.getElementById('lifeFill')
+			const lifeText = document.getElementById('lifeText')
+			const heatValue = document.getElementById('heatValue')
+			const burnValue = document.getElementById('burnValue')
+
+			aura.burning('#agent-card', {
+				onFrame(time) {
+					const life = 62 + Math.sin(time * 1.35) * 4 + Math.sin(time * 4.8) * 1.4
+					const lifeFixed = Math.max(48, Math.min(68, life))
+					lifeFill.style.width = lifeFixed + '%'
+					lifeText.textContent = lifeFixed.toFixed(0) + '%'
+					heatValue.textContent = (96 + Math.sin(time * 3.1) * 2).toFixed(0) + '%'
+					const burn = 4.6 + Math.sin(time * 2.4) * 0.25 + Math.cos(time * 5.1) * 0.1
+					burnValue.textContent = burn.toFixed(1) + 'x'
+				},
+			})
+		</script>
+	</body>
+</html>
