@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a visual or runtime issue
+labels: [bug]
+body:
+    - type: textarea
+      id: what
+      attributes:
+          label: What happened
+          description: Expected vs actual
+      validations:
+          required: true
+    - type: input
+      id: browser
+      attributes:
+          label: Browser
+          placeholder: Chrome 130 / Safari 18
+      validations:
+          required: true
+    - type: dropdown
+      id: effect
+      attributes:
+          label: Effect
+          options:
+              - Motion
+              - MotionBorder
+              - FireBorder
+              - BurningFire
+              - Demo site
+      validations:
+          required: true
+    - type: textarea
+      id: repro
+      attributes:
+          label: Minimal reproduction
+          render: ts

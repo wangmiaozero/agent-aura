@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura — Make Agents Pretty</title>
+		<link
+			rel="icon"
+			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>"
+		/>
+		<meta
+			name="description"
+			content="Zero-dependency WebGL2 effects for Agent UIs: AI glow borders, burning fire frames, and overclock-life flames."
+		/>
+		<style>
+			:root {
+				--bg: #070708;
+				--text: #f6f1ea;
+				--muted: rgba(255, 255, 255, 0.58);
+				--line: rgba(255, 140, 60, 0.22);
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				min-height: 100%;
+				background:
+					radial-gradient(circle at 50% 0%, rgba(255, 90, 20, 0.16), transparent 36%),
+					radial-gradient(circle at 80% 80%, rgba(80, 40, 255, 0.12), transparent 30%), #070708;
+				color: var(--text);
+				font-family: Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+			}
+
+			body {
+				padding: 28px 20px 64px;
+			}
+
+			.nav {
+				max-width: 1180px;
+				margin: 0 auto 28px;
+				display: flex;
+				justify-content: space-between;
+				gap: 16px;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+
+			.brand {
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				font-size: 13px;
+				color: #ffb07a;
+			}
+
+			.links {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+			}
+
+			.links a {
+				color: var(--text);
+				text-decoration: none;
+				font-size: 13px;
+				padding: 8px 12px;
+				border: 1px solid var(--line);
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.usage {
+				margin-top: 22px;
+				max-width: 560px;
+				padding: 16px 18px;
+				border-radius: 14px;
+				background: rgba(0, 0, 0, 0.28);
+				border: 1px solid var(--line);
+				overflow-x: auto;
+			}
+
+			.usage pre {
+				margin: 0;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 13px;
+				line-height: 1.7;
+				color: #ffd2ad;
+			}
+
+			.hero {
+				max-width: 1180px;
+				margin: 0 auto 36px;
+			}
+
+			h1 {
+				margin: 0 0 12px;
+				font-size: clamp(42px, 8vw, 84px);
+				line-height: 0.92;
+				letter-spacing: -0.06em;
+				background: linear-gradient(180deg, #fff 0%, #ffd2ad 42%, #ff7a32 100%);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+			}
+
+			.lead {
+				max-width: 680px;
+				color: var(--muted);
+				line-height: 1.8;
+				font-size: 16px;
+			}
+
+			.install {
+				display: inline-block;
+				margin-top: 22px;
+				padding: 12px 16px;
+				border-radius: 12px;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid var(--line);
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 14px;
+			}
+
+			.gallery {
+				max-width: 1180px;
+				margin: 0 auto;
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 18px;
+			}
+
+			.preview {
+				position: relative;
+				min-height: 430px;
+				padding: 72px 18px 28px;
+				overflow: hidden;
+				border-radius: 28px;
+				background: rgba(8, 8, 10, 0.72);
+				border: 1px solid rgba(255, 255, 255, 0.06);
+			}
+
+			.card {
+				position: relative;
+				z-index: 2;
+				min-height: 320px;
+				padding: 28px 24px;
+				border-radius: 22px;
+				background: linear-gradient(180deg, rgba(18, 12, 12, 0.94), rgba(8, 8, 9, 0.96));
+				border: 1px solid rgba(255, 120, 30, 0.45);
+				box-shadow: 0 0 24px rgba(255, 80, 20, 0.12);
+			}
+
+			#motion-card {
+				border-color: rgba(120, 170, 255, 0.35);
+				box-shadow: 0 0 24px rgba(90, 120, 255, 0.12);
+			}
+
+			#neural-preview {
+				overflow: visible;
+				padding: 88px 36px 48px;
+			}
+
+			#neural-card {
+				border-color: rgba(120, 210, 255, 0.22);
+				box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+				background: linear-gradient(145deg, rgba(20, 23, 31, 0.96), rgba(9, 11, 16, 0.98));
+			}
+
+			.tag {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				padding: 6px 10px;
+				border-radius: 999px;
+				border: 1px solid rgba(255, 120, 30, 0.28);
+				color: #ffae73;
+				font-size: 11px;
+				letter-spacing: 1.4px;
+				text-transform: uppercase;
+			}
+
+			.card h2 {
+				margin: 18px 0 8px;
+				font-size: 28px;
+				letter-spacing: -0.04em;
+			}
+
+			.card p {
+				margin: 0;
+				color: var(--muted);
+				line-height: 1.7;
+				font-size: 14px;
+			}
+
+			.card code {
+				display: inline-flex;
+				margin-top: 22px;
+				color: #ffcda6;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 12px;
+			}
+
+			@media (max-width: 980px) {
+				.gallery {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="brand">Agent Aura</div>
+			<div class="links">
+				<a href="#motion-preview">Motion Glow</a>
+				<a href="#neural-preview">Motion Border</a>
+				<a href="#fire-preview">Fire Border</a>
+				<a href="#burn-preview">Burning Fire</a>
+				<a href="https://github.com/wangmiaozero/agent-aura" target="_blank">GitHub</a>
+				<a href="https://www.npmjs.com/package/agent-aura" target="_blank">npm</a>
+			</div>
+		</nav>
+
+		<header class="hero">
+			<h1>AGENT<br />AURA</h1>
+			<p class="lead">
+				给 Agent UI 用的零依赖 WebGL2 特效库：流光遮罩、神经光场边框、火焰燃烧框和超频燃烧生命态。
+			</p>
+			<div class="install">npm install agent-aura</div>
+			<div class="usage">
+				<pre>
+import { aura } from 'agent-aura'
+
+aura.motion('#card')
+aura.border('#card')
+aura.fire('#card')
+aura.burning('#card')</pre>
+			</div>
+		</header>
+
+		<section class="gallery">
+			<article class="preview" id="motion-preview">
+				<div class="card" id="motion-card">
+					<div class="tag">Motion · Glow</div>
+					<h2>AI Motion</h2>
+					<p>原项目能力完整保留：WebGL2 彩色流光边框，适合 Agent 工作台、对话框、卡片高亮。</p>
+					<code>aura.motion('#motion-card')</code>
+				</div>
+			</article>
+
+			<article class="preview" id="neural-preview">
+				<div class="card" id="neural-card">
+					<div class="tag">Neural · Field</div>
+					<h2>MOTION BORDER</h2>
+					<p>连续 Shader 光场沿圆角边框流动，光向外溢出。适合思考中、推理中、Agent 活跃态。</p>
+					<code>aura.border('#neural-card')</code>
+				</div>
+			</article>
+
+			<article class="preview" id="fire-preview">
+				<div class="card" id="fire-card">
+					<div class="tag">Fire Border</div>
+					<h2>BURNING BORDER</h2>
+					<p>火焰沿 UI 边框持续燃烧，带核心、外焰和火星飞溅。适合危险模式、执行中、点火态。</p>
+					<code>aura.fire('#fire-card')</code>
+				</div>
+			</article>
+
+			<article class="preview" id="burn-preview">
+				<div class="card" id="burn-card">
+					<div class="tag">Agent Overclock</div>
+					<h2>AGENT BURNING</h2>
+					<p>更猛的火焰 + 烟雾 + 背景热浪，像 Agent 正在燃烧寿命硬扛推理。</p>
+					<code>aura.burning('#burn-card')</code>
+				</div>
+			</article>
+		</section>
+
+		<script type="module">
+			try {
+				const { aura } = await import('./build/index.js')
+
+				aura.motion('#motion-card', {
+					mode: 'dark',
+					borderRadius: 22,
+					borderWidth: 6,
+					glowWidth: 140,
+				})
+
+				aura.border('#neural-card', {
+					container: '#neural-preview',
+					glowPadding: 64,
+					glowWidth: 90,
+					borderWidth: 2,
+					borderRadius: 22,
+				})
+
+				aura.fire('#fire-card', {
+					container: '#fire-preview',
+				})
+
+				aura.burning('#burn-card', {
+					container: '#burn-preview',
+				})
+			} catch (error) {
+				console.error(error)
+				const install = document.querySelector('.install')
+				if (install) install.textContent = '请先运行 npm run build，再刷新页面'
+			}
+		</script>
+	</body>
+</html>
