@@ -1,272 +1,111 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en" data-i18n-page="home">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Agent Aura · Motion Border</title>
+		<link rel="stylesheet" href="./site.css" />
 		<style>
-			* {
-				box-sizing: border-box;
-			}
-
-			html,
-			body {
-				width: 100%;
-				height: 100%;
-				margin: 0;
-			}
-
-			body {
-				overflow: hidden;
-				display: flex;
-				align-items: center;
-				justify-content: center;
+			.figure-stage {
 				background: radial-gradient(circle at 50% 45%, #18202b 0%, #0b0e14 45%, #050608 100%);
-				font-family:
-					Inter,
-					-apple-system,
-					BlinkMacSystemFont,
-					'PingFang SC',
-					sans-serif;
 			}
-
-			.site-nav {
-				position: fixed;
-				top: 18px;
-				left: 18px;
-				z-index: 20;
-				display: flex;
-				gap: 8px;
-				flex-wrap: wrap;
-			}
-
-			.site-nav a {
-				color: rgba(190, 235, 255, 0.9);
-				text-decoration: none;
-				font-size: 12px;
-				padding: 6px 10px;
-				border-radius: 999px;
-				border: 1px solid rgba(100, 210, 255, 0.18);
-				background: rgba(0, 0, 0, 0.35);
-			}
-
-			.agent-stage {
-				position: relative;
-				width: min(820px, calc(100vw - 120px));
-			}
-
-			.agent-card {
-				position: relative;
-				z-index: 2;
-				min-height: 440px;
-				overflow: hidden;
-				border-radius: 28px;
-				border: 1px solid rgba(255, 255, 255, 0.075);
+			.figure {
+				border-color: rgba(120, 210, 255, 0.18);
 				background: linear-gradient(145deg, rgba(20, 23, 31, 0.96), rgba(9, 11, 16, 0.98));
-				box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
-			}
-
-			.agent-card::before {
-				content: '';
-				position: absolute;
-				inset: 0;
-				pointer-events: none;
-				background:
-					radial-gradient(circle at 15% 0%, rgba(48, 182, 255, 0.06), transparent 40%),
-					radial-gradient(circle at 85% 100%, rgba(190, 65, 255, 0.045), transparent 45%);
-			}
-
-			.content {
-				position: relative;
-				z-index: 3;
-				padding: 48px;
-			}
-
-			.status {
-				display: inline-flex;
-				align-items: center;
-				gap: 9px;
-				padding: 7px 13px;
-				border-radius: 999px;
-				color: rgba(190, 235, 255, 0.9);
-				background: rgba(57, 182, 255, 0.055);
-				border: 1px solid rgba(100, 210, 255, 0.13);
-				font-size: 11px;
-				letter-spacing: 1.4px;
-			}
-
-			.status-dot {
-				width: 7px;
-				height: 7px;
-				border-radius: 50%;
-				background: #9beaff;
-				box-shadow:
-					0 0 8px #75dcff,
-					0 0 18px #3ab6ff;
-				animation: dotPulse 1.2s ease-in-out infinite alternate;
-			}
-
-			@keyframes dotPulse {
-				from {
-					opacity: 0.5;
-					transform: scale(0.8);
-				}
-				to {
-					opacity: 1;
-					transform: scale(1.25);
-				}
-			}
-
-			h1 {
-				margin: 28px 0 14px;
-				font-size: clamp(48px, 7vw, 76px);
-				line-height: 0.95;
-				letter-spacing: -4px;
-				background: linear-gradient(180deg, #fff 0%, #dbefff 48%, #8bd8ff 100%);
-				-webkit-background-clip: text;
-				background-clip: text;
-				color: transparent;
-			}
-
-			.description {
-				max-width: 600px;
-				margin: 0;
-				color: rgba(255, 255, 255, 0.48);
-				line-height: 1.9;
-				font-size: 14px;
-			}
-
-			.metrics {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 12px;
-				margin-top: 32px;
-			}
-
-			.metric {
-				padding: 16px;
-				border-radius: 15px;
-				background: rgba(255, 255, 255, 0.018);
-				border: 1px solid rgba(255, 255, 255, 0.055);
-			}
-
-			.metric-label {
-				font-size: 10px;
-				letter-spacing: 1.3px;
-				color: rgba(255, 255, 255, 0.32);
-			}
-
-			.metric-value {
-				margin-top: 8px;
-				color: rgba(215, 244, 255, 0.9);
-				font-size: 20px;
-				font-weight: 600;
-			}
-
-			.footer {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-top: 34px;
-				color: rgba(255, 255, 255, 0.28);
-				font-size: 12px;
-			}
-
-			.thinking {
-				display: flex;
-				align-items: center;
-				gap: 5px;
-			}
-
-			.thinking i {
-				display: block;
-				width: 4px;
-				height: 4px;
-				border-radius: 50%;
-				background: #8bdfff;
-				animation: thinking 1.3s infinite;
-			}
-
-			.thinking i:nth-child(2) {
-				animation-delay: 0.15s;
-			}
-
-			.thinking i:nth-child(3) {
-				animation-delay: 0.3s;
-			}
-
-			@keyframes thinking {
-				0%,
-				70%,
-				100% {
-					opacity: 0.2;
-					transform: scale(0.7);
-				}
-				35% {
-					opacity: 1;
-					transform: scale(1.3);
-				}
-			}
-
-			@media (max-width: 700px) {
-				.agent-stage {
-					width: calc(100vw - 50px);
-				}
-				.content {
-					padding: 30px 24px;
-				}
-				.metrics {
-					grid-template-columns: 1fr;
-				}
 			}
 		</style>
 	</head>
 	<body>
-		<nav class="site-nav">
-			<a href="./index.html">Agent Aura</a>
-			<a href="./glow.html">Glow</a>
-			<a href="./fire-border.html">Fire Border</a>
-			<a href="./burning-fire.html">Burning</a>
+		<nav class="nav">
+			<a class="brand" href="./index.html">Agent Aura</a>
+			<div class="links">
+				<a href="./index.html" data-i18n="nav.demo">演示</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<button type="button" data-lang-toggle>中文</button>
+			</div>
 		</nav>
-
-		<div class="agent-stage" id="stage">
-			<div class="agent-card" id="agentCard">
-				<div class="content">
-					<div class="status">
-						<span class="status-dot"></span>
-						AGENT THINKING
+		<main class="demo-wrap">
+			<header class="demo-head">
+				<div class="tag" data-i18n="home.borderTag">Neural · Field</div>
+				<h1 data-i18n="home.borderTitle">MOTION BORDER</h1>
+				<p data-i18n="home.borderDesc">
+					连续 Shader 光场沿圆角边框流动，光向外溢出。适合思考中、推理中、Agent 活跃态。
+				</p>
+			</header>
+			<div class="figure-grid">
+				<div class="figure-stage" id="border-card-stage">
+					<div class="figure is-card" id="border-card">
+						<span class="figure-label" data-i18n="demo.thinking">思考中</span>
 					</div>
-					<h1>Neural<br />Motion</h1>
-					<p class="description">
-						Agent 正在进行深度推理。多组能量光源沿边缘持续流动，不使用明显粒子轨迹，而是通过连续
-						Shader 光场表现活跃状态。现已作为 <code>MotionBorder</code> 从 agent-aura 直接调用。
-					</p>
-					<div class="metrics">
-						<div class="metric">
-							<div class="metric-label">THINKING</div>
-							<div class="metric-value">HIGH</div>
-						</div>
-						<div class="metric">
-							<div class="metric-label">CONTEXT</div>
-							<div class="metric-value">128K</div>
-						</div>
-						<div class="metric">
-							<div class="metric-label">STATUS</div>
-							<div class="metric-value">ACTIVE</div>
-						</div>
+				</div>
+				<div class="figure-stage" id="border-pill-stage">
+					<div class="figure is-pill" id="border-pill">
+						<span class="figure-label" data-i18n="demo.streaming">流式输出</span>
 					</div>
-					<div class="footer">
-						<span>Agent Runtime</span>
-						<div class="thinking">Thinking <i></i><i></i><i></i></div>
+				</div>
+				<div class="figure-stage" id="border-circle-stage">
+					<div class="figure is-circle" id="border-circle">
+						<span class="figure-label" data-i18n="demo.avatar">头像</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="border-idle-stage">
+					<div class="figure is-card" id="border-idle">
+						<span class="figure-label" data-i18n="demo.idle">待命</span>
 					</div>
 				</div>
 			</div>
-		</div>
-
+			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
+				提示词可直接改选择器 / 区域 / 参数，再复制给 Cursor / Claude。
+			</p>
+			<div class="prompt-block">
+				<div class="prompt-head">
+					<strong data-i18n="copy.block.border">Border · 给 AI：安装并挂到指定区域</strong>
+					<div class="prompt-actions">
+						<button type="button" class="prompt-reset" data-reset-prompt="border" data-i18n="copy.reset">重置</button>
+						<button type="button" class="copy-prompt" data-copy-prompt="border">
+							<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+						</button>
+					</div>
+				</div>
+				<textarea data-prompt-preview="border" spellcheck="false" rows="12"></textarea>
+			</div>
+		</main>
 		<script type="module">
-			import { aura } from './build/index.js'
-
-			aura.border('#agentCard')
+			import { bootDemo } from './demo-boot.js'
+			bootDemo((aura) => {
+				aura.border('#border-card', {
+					container: '#border-card-stage',
+					glowPadding: 48,
+					glowWidth: 80,
+					borderWidth: 2,
+					borderRadius: 22,
+				})
+				aura.border('#border-pill', {
+					container: '#border-pill-stage',
+					glowPadding: 36,
+					glowWidth: 64,
+					borderWidth: 2,
+					borderRadius: 999,
+					skipGreeting: true,
+				})
+				aura.border('#border-circle', {
+					container: '#border-circle-stage',
+					glowPadding: 40,
+					glowWidth: 72,
+					borderWidth: 2,
+					borderRadius: 999,
+					skipGreeting: true,
+				})
+				aura.border('#border-idle', {
+					container: '#border-idle-stage',
+					glowPadding: 32,
+					glowWidth: 48,
+					borderWidth: 1.5,
+					borderRadius: 18,
+					speed: 0.45,
+					skipGreeting: true,
+				})
+			})
 		</script>
 	</body>
 </html>

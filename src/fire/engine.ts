@@ -113,8 +113,8 @@ export class FireEngine {
 
 		const gl = this.canvas.getContext('webgl2', {
 			alpha: true,
-			antialias: false,
-			premultipliedAlpha: false,
+			antialias: true,
+			premultipliedAlpha: true,
 			powerPreference: 'high-performance',
 		})
 		if (!gl) throw new Error('WebGL2 is required but not available.')
@@ -122,9 +122,9 @@ export class FireEngine {
 
 		this.fire = new ParticleLayer(gl, this.options.particleCount, particleVert, fireFrag)
 		if (preset === 'burning') {
-			this.fire.setStyle(1, 0.18, 0.56)
+			this.fire.setStyle(1.15, 0.18, 0.56)
 		} else {
-			this.fire.setStyle(0.9, 0.12, 0.52)
+			this.fire.setStyle(1.05, 0.12, 0.52)
 		}
 
 		this.smoke =
@@ -331,20 +331,20 @@ export class FireEngine {
 				alpha = age < 0.1 ? age / 0.1 : 1 - (age - 0.1) / 0.9
 				alpha = Math.pow(Math.max(alpha, 0), 1.2)
 				if (p.spark) {
-					this.fire.alphas[i] = alpha * 1.28
+					this.fire.alphas[i] = alpha * 1.32
 					this.fire.sizes[i] = p.baseSize * (1 - age * 0.55)
 				} else {
-					this.fire.alphas[i] = alpha * 0.88
+					this.fire.alphas[i] = alpha * 1.0
 					this.fire.sizes[i] = p.baseSize * (0.65 + age * 1.55)
 				}
 			} else {
 				alpha = Math.pow(Math.max(alpha, 0), 1.25)
 				if (p.spark) {
-					this.fire.alphas[i] = alpha * 1.2
+					this.fire.alphas[i] = alpha * 1.22
 					this.fire.sizes[i] = p.baseSize * (1 - age * 0.55)
 				} else {
-					this.fire.alphas[i] = alpha * 0.76
-					this.fire.sizes[i] = p.baseSize * (0.58 + age * 1.35)
+					this.fire.alphas[i] = alpha * 0.86
+					this.fire.sizes[i] = p.baseSize * (0.58 + age * 1.4)
 				}
 			}
 
@@ -383,10 +383,10 @@ export class FireEngine {
 		gl.clearColor(0, 0, 0, 0)
 		gl.clear(gl.COLOR_BUFFER_BIT)
 
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+		gl.blendFuncSeparate(gl.ONE, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
 		this.glow?.draw(time)
 		this.smoke?.draw()
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE)
+		gl.blendFuncSeparate(gl.ONE, gl.ONE, gl.ONE, gl.ONE)
 		this.fire.draw()
 		this.options.onFrame?.(time)
 	}

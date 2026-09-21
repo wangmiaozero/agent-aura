@@ -13,10 +13,20 @@ const htmlFiles = [
 	'index.html',
 	'docs.html',
 	'i18n.js',
+	'ai-prompts.js',
+	'site.css',
+	'demo-boot.js',
 	'glow.html',
 	'motion-border.html',
 	'fire-border.html',
 	'burning-fire.html',
+	'shape.html',
+	'water.html',
+	'cultivation.html',
+	'demonic.html',
+	'thunder.html',
+	'void.html',
+	'glitch.html',
 ]
 
 for (const file of htmlFiles) {

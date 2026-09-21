@@ -17,5 +17,5 @@ void main() {
 	float dist = length(uv);
 	float alpha = (1.0 - smoothstep(0.0, 0.5, dist)) * vAlpha;
 	if (alpha < 0.01) discard;
-	outColor = vec4(vColor, alpha);
+	outColor = vec4(vColor * alpha, alpha);
 }

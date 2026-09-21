@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-i18n-page="home">
+<html lang="en" data-i18n-page="home">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,326 +10,164 @@
 		/>
 		<meta
 			name="description"
-			content="Zero-dependency WebGL2 effects for Agent UIs: stream glow masks, neural energy borders, burning fire, and overclock-life flames."
+			content="Zero-dependency effects for Agent UIs: glow, neural borders, fire, overclock flames, shape auras, liquid water, golden cultivation mist, purple-black demonic aura, thunder tribulation arcs, void blackhole ribbons, and glitch collapse tears."
 		/>
-		<style>
-			:root {
-				--bg: #070708;
-				--text: #f6f1ea;
-				--muted: rgba(255, 255, 255, 0.58);
-				--line: rgba(255, 140, 60, 0.22);
-			}
-
-			* {
-				box-sizing: border-box;
-			}
-
-			html,
-			body {
-				margin: 0;
-				min-height: 100%;
-				background:
-					radial-gradient(circle at 50% 0%, rgba(255, 90, 20, 0.16), transparent 36%),
-					radial-gradient(circle at 80% 80%, rgba(80, 40, 255, 0.12), transparent 30%), #070708;
-				color: var(--text);
-				font-family: Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-			}
-
-			body {
-				padding: 28px 20px 64px;
-			}
-
-			.nav {
-				max-width: 1180px;
-				margin: 0 auto 28px;
-				display: flex;
-				justify-content: space-between;
-				gap: 16px;
-				flex-wrap: wrap;
-				align-items: center;
-			}
-
-			.brand {
-				font-weight: 700;
-				letter-spacing: 0.08em;
-				text-transform: uppercase;
-				font-size: 13px;
-				color: #ffb07a;
-			}
-
-			.links {
-				display: flex;
-				gap: 10px;
-				flex-wrap: wrap;
-			}
-
-			.links a,
-			.links button {
-				color: var(--text);
-				text-decoration: none;
-				font-size: 13px;
-				padding: 8px 12px;
-				border: 1px solid var(--line);
-				border-radius: 999px;
-				background: rgba(255, 255, 255, 0.03);
-			}
-
-			.links button {
-				cursor: pointer;
-				font: inherit;
-			}
-
-			.usage {
-				margin-top: 22px;
-				max-width: 560px;
-				padding: 16px 18px;
-				border-radius: 14px;
-				background: rgba(0, 0, 0, 0.28);
-				border: 1px solid var(--line);
-				overflow-x: auto;
-			}
-
-			.usage pre {
-				margin: 0;
-				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-				font-size: 13px;
-				line-height: 1.7;
-				color: #ffd2ad;
-			}
-
-			.hero {
-				max-width: 1180px;
-				margin: 0 auto 36px;
-			}
-
-			h1 {
-				margin: 0 0 12px;
-				font-size: clamp(42px, 8vw, 84px);
-				line-height: 0.92;
-				letter-spacing: -0.06em;
-				background: linear-gradient(180deg, #fff 0%, #ffd2ad 42%, #ff7a32 100%);
-				-webkit-background-clip: text;
-				background-clip: text;
-				color: transparent;
-			}
-
-			.lead {
-				max-width: 680px;
-				color: var(--muted);
-				line-height: 1.8;
-				font-size: 16px;
-			}
-
-			.install {
-				display: inline-block;
-				margin-top: 22px;
-				padding: 12px 16px;
-				border-radius: 12px;
-				background: rgba(255, 255, 255, 0.05);
-				border: 1px solid var(--line);
-				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-				font-size: 14px;
-			}
-
-			.gallery {
-				max-width: 1180px;
-				margin: 0 auto;
-				display: grid;
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-				gap: 18px;
-			}
-
-			.preview {
-				position: relative;
-				min-height: 430px;
-				padding: 72px 18px 28px;
-				overflow: hidden;
-				border-radius: 28px;
-				background: rgba(8, 8, 10, 0.72);
-				border: 1px solid rgba(255, 255, 255, 0.06);
-			}
-
-			.card {
-				position: relative;
-				z-index: 2;
-				min-height: 320px;
-				padding: 28px 24px;
-				border-radius: 22px;
-				background: linear-gradient(180deg, rgba(18, 12, 12, 0.94), rgba(8, 8, 9, 0.96));
-				border: 1px solid rgba(255, 120, 30, 0.45);
-				box-shadow: 0 0 24px rgba(255, 80, 20, 0.12);
-			}
-
-			#glow-card {
-				border-color: rgba(120, 170, 255, 0.35);
-				box-shadow: 0 0 24px rgba(90, 120, 255, 0.12);
-			}
-
-			#neural-preview {
-				overflow: visible;
-				padding: 88px 36px 48px;
-			}
-
-			#neural-card {
-				border-color: rgba(120, 210, 255, 0.22);
-				box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
-				background: linear-gradient(145deg, rgba(20, 23, 31, 0.96), rgba(9, 11, 16, 0.98));
-			}
-
-			.tag {
-				display: inline-flex;
-				align-items: center;
-				gap: 8px;
-				padding: 6px 10px;
-				border-radius: 999px;
-				border: 1px solid rgba(255, 120, 30, 0.28);
-				color: #ffae73;
-				font-size: 11px;
-				letter-spacing: 1.4px;
-				text-transform: uppercase;
-			}
-
-			.card h2 {
-				margin: 18px 0 8px;
-				font-size: 28px;
-				letter-spacing: -0.04em;
-			}
-
-			.card p {
-				margin: 0;
-				color: var(--muted);
-				line-height: 1.7;
-				font-size: 14px;
-			}
-
-			.card code {
-				display: inline-flex;
-				margin-top: 22px;
-				color: #ffcda6;
-				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-				font-size: 12px;
-			}
-
-			@media (max-width: 980px) {
-				.gallery {
-					grid-template-columns: 1fr;
-				}
-			}
-		</style>
+		<link rel="stylesheet" href="./site.css" />
 	</head>
 	<body>
 		<nav class="nav">
-			<div class="brand">Agent Aura</div>
+			<a class="brand" href="./index.html">Agent Aura</a>
 			<div class="links">
-				<a href="#glow-preview" data-i18n="nav.glow">Glow</a>
-				<a href="#neural-preview" data-i18n="nav.border">Border</a>
-				<a href="#fire-preview" data-i18n="nav.fire">Fire</a>
-				<a href="#burn-preview" data-i18n="nav.burning">Burning</a>
+				<a href="#gallery" data-i18n="home.gallery">All demos</a>
 				<a href="./docs.html" data-i18n="nav.api">API</a>
 				<a href="https://github.com/wangmiaozero/agent-aura" target="_blank">GitHub</a>
 				<a href="https://www.npmjs.com/package/agent-aura" target="_blank">npm</a>
-				<button type="button" data-lang-toggle>EN</button>
+				<button type="button" data-lang-toggle>中文</button>
 			</div>
 		</nav>
 
 		<header class="hero">
-			<h1>AGENT<br />AURA</h1>
-			<p class="lead" data-i18n="home.lead">
-				给 Agent UI 用的零依赖 WebGL2 特效库：流光遮罩、神经光场边框、火焰燃烧框和超频燃烧生命态。
-			</p>
-			<div class="install">npm install agent-aura</div>
-			<div class="usage">
-				<pre>
+			<div>
+				<div class="kicker" data-i18n="home.kicker">Zero-dep · WebGL2 · ESM</div>
+				<h1>AGENT<br />AURA</h1>
+				<p class="lead" data-i18n="home.lead">
+					Zero-dependency effects for Agent UIs: stream glow, neural borders, fire frames, overclock flames, shape-aware auras, liquid water, golden cultivation mist, purple-black demonic aura, thunder tribulation arcs, void blackhole ribbons, and glitch collapse tears.
+				</p>
+				<div class="stats">
+					<span class="stat" data-i18n="home.stat1">11 effects</span>
+					<span class="stat" data-i18n="home.stat2">Zero runtime deps</span>
+					<span class="stat" data-i18n="home.stat3">WebGL2</span>
+				</div>
+				<div class="install">npm install agent-aura</div>
+			</div>
+			<div class="hero-aside">
+				<div class="usage">
+					<pre>
 import { aura } from 'agent-aura'
 
 aura.glow('#card')
 aura.border('#card')
 aura.fire('#card')
-aura.burning('#card')</pre>
+aura.burning('#card')
+aura.shape('#avatar')
+aura.water('#stream')
+aura.cultivation('#dao')
+aura.demonic('#mo')
+aura.thunder('#jie')
+aura.void('#hole')
+aura.glitch('#crash')</pre>
+				</div>
+				<p class="copy-hint" data-i18n="copy.hint">
+					提示词可直接改选择器 / 区域 / 参数，再复制给 Cursor / Claude。
+				</p>
 			</div>
 		</header>
 
-		<section class="gallery">
-			<article class="preview" id="glow-preview">
-				<div class="card" id="glow-card">
-					<div class="tag" data-i18n="home.glowTag">Stream · Mask</div>
-					<h2 data-i18n="home.glowTitle">GLOW</h2>
-					<p data-i18n="home.glowDesc">
-						WebGL2 彩色流光边框，适合 Agent 工作台、对话框、卡片高亮。
-					</p>
-					<code>aura.glow('#glow-card')</code>
-				</div>
-			</article>
-
-			<article class="preview" id="neural-preview">
-				<div class="card" id="neural-card">
-					<div class="tag" data-i18n="home.borderTag">Neural · Field</div>
-					<h2 data-i18n="home.borderTitle">MOTION BORDER</h2>
-					<p data-i18n="home.borderDesc">
-						连续 Shader 光场沿圆角边框流动，光向外溢出。适合思考中、推理中、Agent 活跃态。
-					</p>
-					<code>aura.border('#neural-card')</code>
-				</div>
-			</article>
-
-			<article class="preview" id="fire-preview">
-				<div class="card" id="fire-card">
-					<div class="tag" data-i18n="home.fireTag">Fire Border</div>
-					<h2 data-i18n="home.fireTitle">BURNING BORDER</h2>
-					<p data-i18n="home.fireDesc">
-						火焰沿 UI 边框持续燃烧，带核心、外焰和火星飞溅。适合危险模式、执行中、点火态。
-					</p>
-					<code>aura.fire('#fire-card')</code>
-				</div>
-			</article>
-
-			<article class="preview" id="burn-preview">
-				<div class="card" id="burn-card">
-					<div class="tag" data-i18n="home.burnTag">Agent Overclock</div>
-					<h2 data-i18n="home.burnTitle">AGENT BURNING</h2>
-					<p data-i18n="home.burnDesc">
-						更猛的火焰 + 烟雾 + 背景热浪，像 Agent 正在燃烧寿命硬扛推理。
-					</p>
-					<code>aura.burning('#burn-card')</code>
-				</div>
-			</article>
+		<div class="section-head">
+			<h2 data-i18n="home.gallery">全部演示</h2>
+			<p data-i18n="home.galleryLead">Eleven effects, one page each. Multiple states and shapes per page.</p>
+		</div>
+		<section class="gallery" id="gallery">
+			<a class="demo-card" data-accent="glow" href="./glow.html">
+				<div class="tag" data-i18n="home.glowTag">Stream · Mask</div>
+				<h2 data-i18n="home.glowTitle">GLOW</h2>
+				<p data-i18n="home.glowDesc">WebGL2 彩色流光边框，适合 Agent 工作台、对话框、卡片高亮。</p>
+				<code>aura.glow('#card')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="border" href="./motion-border.html">
+				<div class="tag" data-i18n="home.borderTag">Neural · Field</div>
+				<h2 data-i18n="home.borderTitle">MOTION BORDER</h2>
+				<p data-i18n="home.borderDesc">
+					连续 Shader 光场沿圆角边框流动，光向外溢出。适合思考中、推理中、Agent 活跃态。
+				</p>
+				<code>aura.border('#card')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="fire" href="./fire-border.html">
+				<div class="tag" data-i18n="home.fireTag">Fire Border</div>
+				<h2 data-i18n="home.fireTitle">BURNING BORDER</h2>
+				<p data-i18n="home.fireDesc">
+					火焰沿 UI 边框持续燃烧，带核心、外焰和火星飞溅。适合危险模式、执行中、点火态。
+				</p>
+				<code>aura.fire('#card')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="burning" href="./burning-fire.html">
+				<div class="tag" data-i18n="home.burnTag">Agent Overclock</div>
+				<h2 data-i18n="home.burnTitle">AGENT BURNING</h2>
+				<p data-i18n="home.burnDesc">更猛的火焰 + 烟雾 + 背景热浪，像 Agent 正在燃烧寿命硬扛推理。</p>
+				<code>aura.burning('#card')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="shape" href="./shape.html">
+				<div class="tag" data-i18n="home.shapeTag">Shape · Ribbon Aura</div>
+				<h2 data-i18n="home.shapeTitle">SHAPE AURA</h2>
+				<p data-i18n="home.shapeDesc">
+					WebGL2 沿轮廓的有宽度光带 + 外层柔光 + 能量尘，自动跟随 border-radius / clip-path。
+				</p>
+				<code>aura.shape('#avatar')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="water" href="./water.html">
+				<div class="tag" data-i18n="home.waterTag">Liquid · Shape Field</div>
+				<h2 data-i18n="home.waterTitle">WATER AURA</h2>
+				<p data-i18n="home.waterDesc">
+					WebGL2 轮廓水流 + 水雾场 + 水珠，自动跟随 border-radius / clip-path。
+				</p>
+				<code>aura.water('#stream')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="cultivation" href="./cultivation.html">
+				<div class="tag" data-i18n="home.cultivationTag">Immortal · Golden Mist</div>
+				<h2 data-i18n="home.cultivationTitle">CULTIVATION AURA</h2>
+				<p data-i18n="home.cultivationDesc">
+					WebGL2 金光脉 + 仙雾场 + 灵子，自动跟随 border-radius / clip-path。
+				</p>
+				<code>aura.cultivation('#dao')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="demonic" href="./demonic.html">
+				<div class="tag" data-i18n="home.demonicTag">Forbidden · Dark Mist</div>
+				<h2 data-i18n="home.demonicTitle">DEMONIC AURA</h2>
+				<p data-i18n="home.demonicDesc">
+					WebGL2 紫黑魔光 + 魔雾场 + 魔焰粒子，自动跟随 border-radius / clip-path。
+				</p>
+				<code>aura.demonic('#mo')</code>
+				<span class="open" data-i18n="home.open">打开演示 →</span>
+			</a>
+			<a class="demo-card" data-accent="thunder" href="./thunder.html">
+				<div class="tag" data-i18n="home.thunderTag">Tribulation · Lightning</div>
+				<h2 data-i18n="home.thunderTitle">THUNDER AURA</h2>
+				<p data-i18n="home.thunderDesc">
+					雷霆沿轮廓高速游走并随机外放电弧，自动跟随 border-radius / clip-path。
+				</p>
+				<code>aura.thunder('#jie')</code>
+				<span class="open" data-i18n="home.open">Open demo →</span>
+			</a>
+			<a class="demo-card" data-accent="void" href="./void.html">
+				<div class="tag" data-i18n="home.voidTag">Event Horizon · Void</div>
+				<h2 data-i18n="home.voidTitle">VOID AURA</h2>
+				<p data-i18n="home.voidDesc">
+					WebGL2 dark shadow ribbon + event horizon + violet highlights + void mist + sparks. Follows border-radius / clip-path.
+				</p>
+				<code>aura.void('#hole')</code>
+				<span class="open" data-i18n="home.open">Open demo →</span>
+			</a>
+			<a class="demo-card" data-accent="glitch" href="./glitch.html">
+				<div class="tag" data-i18n="home.glitchTag">System Collapse · RGB Tear</div>
+				<h2 data-i18n="home.glitchTitle">GLITCH AURA</h2>
+				<p data-i18n="home.glitchDesc">
+					WebGL2 RGB split + digital tears + edge dropouts + data fragments. Follows border-radius / clip-path.
+				</p>
+				<code>aura.glitch('#crash')</code>
+				<span class="open" data-i18n="home.open">Open demo →</span>
+			</a>
 		</section>
 
 		<script type="module">
-			import { detectLang, initI18n, messages } from './i18n.js'
-
+			import { initI18n } from './i18n.js'
 			initI18n()
-
-			try {
-				const { aura } = await import('./build/index.js')
-
-				aura.glow('#glow-card', {
-					mode: 'dark',
-					borderRadius: 22,
-					borderWidth: 6,
-					glowWidth: 140,
-				})
-
-				aura.border('#neural-card', {
-					container: '#neural-preview',
-					glowPadding: 64,
-					glowWidth: 90,
-					borderWidth: 2,
-					borderRadius: 22,
-				})
-
-				aura.fire('#fire-card', {
-					container: '#fire-preview',
-				})
-
-				aura.burning('#burn-card', {
-					container: '#burn-preview',
-				})
-			} catch (error) {
-				console.error(error)
-				const install = document.querySelector('.install')
-				if (install) install.textContent = messages[detectLang()]['home.buildHint']
-			}
 		</script>
 	</body>
 </html>

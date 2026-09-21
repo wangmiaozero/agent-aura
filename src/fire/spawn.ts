@@ -138,13 +138,13 @@ function resetBorderFire(bounds: BorderBounds, initial: boolean): FireParticle {
 		particle.vx = point.normalX * rand(20, 80) + rand(-35, 35)
 		particle.vy = rand(55, 160)
 		particle.maxLife = rand(0.7, 1.5)
-		particle.baseSize = rand(1.5, 4.5)
+		particle.baseSize = rand(2, 6)
 	} else {
 		particle.vx = point.normalX * rand(8, 38) + rand(-16, 16)
 		particle.vy = rand(25, 105)
 		if (point.side === 'top') particle.vy += rand(25, 90)
 		particle.maxLife = rand(0.35, 1.05)
-		particle.baseSize = rand(10, 27)
+		particle.baseSize = rand(13, 32)
 	}
 
 	if (point.side === 'left' || point.side === 'right') {
@@ -175,17 +175,17 @@ function resetBurningFire(bounds: BorderBounds, initial: boolean): FireParticle 
 	if (spark) {
 		particle.vx = p.normalX * rand(40, 120) + rand(-55, 55)
 		particle.vy = rand(90, 220)
-		particle.baseSize = rand(2, 6)
+		particle.baseSize = rand(3, 7)
 		particle.maxLife = rand(0.45, 1.2)
 	} else {
 		particle.vx = p.normalX * rand(14, 46) + rand(-26, 26)
 		particle.vy = rand(70, 180)
-		particle.baseSize = rand(12, 34)
+		particle.baseSize = rand(14, 38)
 		particle.maxLife = rand(0.35, 1.15)
 
 		if (p.side === 'top') {
 			particle.vy += rand(40, 110)
-			particle.baseSize += rand(2, 10)
+			particle.baseSize += rand(4, 14)
 		}
 		if (p.side === 'left' || p.side === 'right') {
 			particle.vx += p.normalX * rand(8, 28)

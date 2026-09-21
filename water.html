@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-i18n-page="home">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura · Water</title>
+		<link rel="stylesheet" href="./site.css" />
+		<style>
+			.figure-stage {
+				background: radial-gradient(circle at 50% 42%, #12202b 0%, #090e14 40%, #040608 100%);
+			}
+			.figure {
+				background: linear-gradient(145deg, #152330, #0a1018);
+				color: #dff9ff;
+				border-color: rgba(140, 220, 255, 0.16);
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<a class="brand" href="./index.html">Agent Aura</a>
+			<div class="links">
+				<a href="./index.html" data-i18n="nav.demo">演示</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<button type="button" data-lang-toggle>中文</button>
+			</div>
+		</nav>
+		<main class="demo-wrap">
+			<header class="demo-head">
+				<div class="tag" data-i18n="home.waterTag">Liquid · Shape Field</div>
+				<h1 data-i18n="home.waterTitle">WATER AURA</h1>
+				<p data-i18n="home.waterDesc">
+					WebGL2 轮廓水流 + 水雾场 + 水珠，自动跟随 border-radius / clip-path。
+				</p>
+			</header>
+			<div class="figure-grid">
+				<div class="figure-stage" id="water-pill-stage">
+					<div class="figure is-pill" id="water-pill">STREAMING</div>
+				</div>
+				<div class="figure-stage" id="water-circle-stage">
+					<div class="figure is-circle" id="water-circle">
+						<span class="figure-label" data-i18n="demo.avatar">头像</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="water-hex-stage">
+					<div class="figure is-hex" id="water-hex">FLOW</div>
+				</div>
+				<div class="figure-stage" id="water-card-stage">
+					<div class="figure is-card" id="water-card">
+						<span class="figure-label" data-i18n="demo.thinking">思考中</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="water-diamond-stage">
+					<div class="figure is-diamond" id="water-diamond">H2O</div>
+				</div>
+				<div class="figure-stage" id="water-chip-stage">
+					<div class="figure is-pill" id="water-chip">
+						<span class="figure-label" data-i18n="demo.idle">待命</span>
+					</div>
+				</div>
+			</div>
+			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
+				提示词可直接改选择器 / 区域 / 参数，再复制给 Cursor / Claude。
+			</p>
+			<div class="prompt-block">
+				<div class="prompt-head">
+					<strong data-i18n="copy.block.water">Water · 给 AI：安装并挂到指定元素</strong>
+					<div class="prompt-actions">
+						<button type="button" class="prompt-reset" data-reset-prompt="water" data-i18n="copy.reset">重置</button>
+						<button type="button" class="copy-prompt" data-copy-prompt="water">
+							<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+						</button>
+					</div>
+				</div>
+				<textarea data-prompt-preview="water" spellcheck="false" rows="12"></textarea>
+			</div>
+		</main>
+		<script type="module">
+			import { bootDemo } from './demo-boot.js'
+			bootDemo((aura) => {
+				const light = { fieldCount: 90, detailCount: 50, skipGreeting: true }
+				aura.water('#water-pill', { container: '#water-pill-stage', offset: 7, fieldCount: 160, detailCount: 90 })
+				aura.water('#water-circle', { container: '#water-circle-stage', offset: 7, ...light })
+				aura.water('#water-hex', { container: '#water-hex-stage', offset: 6, ...light })
+				aura.water('#water-card', { container: '#water-card-stage', offset: 6, ...light })
+				aura.water('#water-diamond', { container: '#water-diamond-stage', offset: 6, ...light })
+				aura.water('#water-chip', { container: '#water-chip-stage', offset: 5, ...light })
+			})
+		</script>
+	</body>
+</html>

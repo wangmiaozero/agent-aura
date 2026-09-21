@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-i18n-page="home">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura · Cultivation</title>
+		<link rel="stylesheet" href="./site.css" />
+		<style>
+			.figure-stage {
+				background: radial-gradient(circle at 50% 42%, #2a2110 0%, #110d07 38%, #060504 72%, #020202 100%);
+			}
+			.figure {
+				background: radial-gradient(circle at 50% 32%, #4f3815, #201508 60%, #0b0805 100%);
+				color: #ffe7a2;
+				border-color: rgba(255, 220, 135, 0.14);
+				font-family: 'Songti SC', 'STSong', serif;
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<a class="brand" href="./index.html">Agent Aura</a>
+			<div class="links">
+				<a href="./index.html" data-i18n="nav.demo">演示</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<button type="button" data-lang-toggle>中文</button>
+			</div>
+		</nav>
+		<main class="demo-wrap">
+			<header class="demo-head">
+				<div class="tag" data-i18n="home.cultivationTag">Immortal · Golden Mist</div>
+				<h1 data-i18n="home.cultivationTitle">CULTIVATION AURA</h1>
+				<p data-i18n="home.cultivationDesc">
+					WebGL2 金光脉 + 仙雾场 + 灵子，自动跟随 border-radius / clip-path。
+				</p>
+			</header>
+			<div class="figure-grid">
+				<div class="figure-stage" id="dao-circle-stage">
+					<div class="figure is-circle" id="dao-circle">道</div>
+				</div>
+				<div class="figure-stage" id="dao-hex-stage">
+					<div class="figure is-hex" id="dao-hex">仙</div>
+				</div>
+				<div class="figure-stage" id="dao-pill-stage">
+					<div class="figure is-pill" id="dao-pill">悟道</div>
+				</div>
+				<div class="figure-stage" id="dao-shield-stage">
+					<div class="figure is-shield" id="dao-shield">灵</div>
+				</div>
+				<div class="figure-stage" id="dao-card-stage">
+					<div class="figure is-card" id="dao-card">
+						<span class="figure-label" data-i18n="demo.idle">待命</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="dao-diamond-stage">
+					<div class="figure is-diamond" id="dao-diamond">金</div>
+				</div>
+			</div>
+			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
+				提示词可直接改选择器 / 区域 / 参数，再复制给 Cursor / Claude。
+			</p>
+			<div class="prompt-block">
+				<div class="prompt-head">
+					<strong data-i18n="copy.block.cultivation">Cultivation · 给 AI：安装并挂到指定元素</strong>
+					<div class="prompt-actions">
+						<button type="button" class="prompt-reset" data-reset-prompt="cultivation" data-i18n="copy.reset">
+							重置
+						</button>
+						<button type="button" class="copy-prompt" data-copy-prompt="cultivation">
+							<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+						</button>
+					</div>
+				</div>
+				<textarea data-prompt-preview="cultivation" spellcheck="false" rows="12"></textarea>
+			</div>
+		</main>
+		<script type="module">
+			import { bootDemo } from './demo-boot.js'
+			bootDemo((aura) => {
+				const light = { fieldCount: 90, detailCount: 50, skipGreeting: true }
+				aura.cultivation('#dao-circle', { container: '#dao-circle-stage', offset: 7, fieldCount: 160, detailCount: 90 })
+				aura.cultivation('#dao-hex', { container: '#dao-hex-stage', offset: 6, ...light })
+				aura.cultivation('#dao-pill', { container: '#dao-pill-stage', offset: 6, ...light })
+				aura.cultivation('#dao-shield', { container: '#dao-shield-stage', offset: 6, ...light })
+				aura.cultivation('#dao-card', { container: '#dao-card-stage', offset: 5, ...light })
+				aura.cultivation('#dao-diamond', { container: '#dao-diamond-stage', offset: 6, ...light })
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" data-i18n-page="home">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura · Void</title>
+		<link rel="stylesheet" href="./site.css" />
+		<style>
+			.figure-stage {
+				background: radial-gradient(circle at 50% 42%, #140816 0%, #08050c 42%, #030206 78%, #010102 100%);
+			}
+			.figure {
+				background: radial-gradient(circle, #1c1026, #08050d 72%);
+				color: #e8d6ff;
+				border-color: rgba(155, 80, 255, 0.16);
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<a class="brand" href="./index.html">Agent Aura</a>
+			<div class="links">
+				<a href="./index.html" data-i18n="nav.demo">Demos</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<button type="button" data-lang-toggle>中文</button>
+			</div>
+		</nav>
+		<main class="demo-wrap">
+			<header class="demo-head">
+				<div class="tag" data-i18n="home.voidTag">Event Horizon · Void</div>
+				<h1 data-i18n="home.voidTitle">VOID AURA</h1>
+				<p data-i18n="home.voidDesc">
+					A dark event-horizon ribbon, violet accretion glow, mist, and sparks. Follows border-radius / clip-path.
+				</p>
+			</header>
+			<div class="figure-grid">
+				<div class="figure-stage" id="void-circle-stage">
+					<div class="figure is-circle" id="void-circle">
+						<span class="figure-label" data-i18n="demo.overclock">Overclock</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="void-hex-stage">
+					<div class="figure is-hex" id="void-hex">VOID</div>
+				</div>
+				<div class="figure-stage" id="void-pill-stage">
+					<div class="figure is-pill" id="void-pill">
+						<span class="figure-label" data-i18n="demo.thinking">Thinking</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="void-card-stage">
+					<div class="figure is-card" id="void-card">
+						<span class="figure-label" data-i18n="demo.executing">Executing</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="void-diamond-stage">
+					<div class="figure is-diamond" id="void-diamond">∞</div>
+				</div>
+				<div class="figure-stage" id="void-shield-stage">
+					<div class="figure is-shield" id="void-shield">
+						<span class="figure-label" data-i18n="demo.danger">Danger</span>
+					</div>
+				</div>
+			</div>
+			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
+				Edit the prompt (selector, area, options), then copy it for Cursor / Claude.
+			</p>
+			<div class="prompt-block">
+				<div class="prompt-head">
+					<strong data-i18n="copy.block.void">Void · for AI: install and attach to an element</strong>
+					<div class="prompt-actions">
+						<button type="button" class="prompt-reset" data-reset-prompt="void" data-i18n="copy.reset">Reset</button>
+						<button type="button" class="copy-prompt" data-copy-prompt="void">
+							<span data-copy-label data-i18n="copy.prompt">Copy AI prompt</span>
+						</button>
+					</div>
+				</div>
+				<textarea data-prompt-preview="void" spellcheck="false" rows="12"></textarea>
+			</div>
+		</main>
+		<script type="module">
+			import { bootDemo } from './demo-boot.js'
+			bootDemo((aura) => {
+				const light = { mistCount: 90, sparkCount: 42, skipGreeting: true }
+				aura.void('#void-circle', { container: '#void-circle-stage' })
+				aura.void('#void-hex', { container: '#void-hex-stage', offset: 7, ...light })
+				aura.void('#void-pill', { container: '#void-pill-stage', offset: 6, ...light })
+				aura.void('#void-card', { container: '#void-card-stage', offset: 6, ...light })
+				aura.void('#void-diamond', { container: '#void-diamond-stage', offset: 6, ...light })
+				aura.void('#void-shield', { container: '#void-shield-stage', offset: 7, ...light })
+			})
+		</script>
+	</body>
+</html>

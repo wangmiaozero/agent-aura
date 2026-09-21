@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-i18n-page="docs">
+<html lang="en" data-i18n-page="docs">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +10,7 @@
 		/>
 		<meta
 			name="description"
-			content="agent-aura API: aura.glow / border / fire / burning options and lifecycle."
+			content="agent-aura API: aura.glow / border / fire / burning / shape / water / cultivation / demonic / thunder / void / glitch options and lifecycle."
 		/>
 		<style>
 			:root {
@@ -82,6 +82,12 @@
 			.links button {
 				cursor: pointer;
 				font: inherit;
+			}
+
+			.links a.is-current {
+				background: rgba(255, 140, 60, 0.16);
+				border-color: rgba(255, 140, 60, 0.45);
+				color: #ffd2ad;
 			}
 
 			h1 {
@@ -174,6 +180,128 @@
 				background: rgba(255, 255, 255, 0.05);
 			}
 
+			.copy-hint {
+				margin: 14px 0 0;
+				max-width: 720px;
+				color: var(--muted);
+				line-height: 1.7;
+				font-size: 13px;
+			}
+
+			.copy-prompt {
+				display: inline-flex;
+				align-items: center;
+				padding: 7px 12px;
+				border-radius: 999px;
+				border: 1px solid rgba(255, 140, 60, 0.38);
+				background: rgba(255, 120, 30, 0.1);
+				color: #ffd2ad;
+				font: inherit;
+				font-size: 12px;
+				letter-spacing: 0.02em;
+				cursor: pointer;
+				white-space: nowrap;
+			}
+
+			.copy-prompt::before {
+				content: none;
+			}
+
+			.copy-prompt svg {
+				width: 13px;
+				height: 13px;
+				margin-right: 6px;
+				flex: 0 0 auto;
+			}
+
+			.copy-prompt:hover {
+				background: rgba(255, 120, 30, 0.18);
+			}
+
+			.copy-prompt.is-copied {
+				border-color: rgba(120, 220, 140, 0.45);
+				color: #b8f0c4;
+			}
+
+			.copy-prompt.is-copied svg {
+				display: none;
+			}
+
+			.copy-prompt.is-copied::before {
+				content: '✓';
+				margin-right: 6px;
+			}
+
+			.prompt-block {
+				margin: 14px 0 22px;
+				border-radius: 14px;
+				border: 1px solid var(--line);
+				background: rgba(0, 0, 0, 0.28);
+				overflow: hidden;
+			}
+
+			.prompt-head {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 12px;
+				flex-wrap: wrap;
+				padding: 10px 14px;
+				border-bottom: 1px solid var(--line);
+			}
+
+			.prompt-head strong {
+				color: #ffd2ad;
+				font-size: 13px;
+				font-weight: 600;
+			}
+
+			.prompt-actions {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				flex-wrap: wrap;
+			}
+
+			.prompt-reset {
+				padding: 7px 12px;
+				border-radius: 999px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				background: transparent;
+				color: var(--muted);
+				font: inherit;
+				font-size: 12px;
+				cursor: pointer;
+			}
+
+			.prompt-reset:hover {
+				color: #ffd2ad;
+				border-color: var(--line);
+			}
+
+			.prompt-block textarea {
+				display: block;
+				box-sizing: border-box;
+				width: 100%;
+				min-height: 200px;
+				max-height: 420px;
+				margin: 0;
+				padding: 14px 16px 16px;
+				border: 0;
+				border-radius: 0;
+				background: transparent;
+				color: #e8d5c4;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 12px;
+				line-height: 1.7;
+				resize: vertical;
+				outline: none;
+			}
+
+			.prompt-block textarea:focus {
+				background: rgba(255, 255, 255, 0.03);
+			}
+
 			table {
 				width: 100%;
 				border-collapse: collapse;
@@ -214,28 +342,31 @@
 	</head>
 	<body>
 		<nav class="nav">
-			<a class="brand" href="./">Agent Aura</a>
+			<a class="brand" href="./index.html">Agent Aura</a>
 			<div class="links">
-				<a href="./" data-i18n="nav.demo">演示</a>
-				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<a href="./index.html" data-i18n="nav.demo">Demos</a>
+				<a class="is-current" href="./docs.html" data-i18n="nav.api">API</a>
 				<a
 					data-github-docs
-					href="https://github.com/wangmiaozero/agent-aura/blob/main/docs/api.zh-CN.md"
+					href="https://github.com/wangmiaozero/agent-aura/blob/main/docs/api.md"
 					target="_blank"
 					data-i18n="nav.githubDocs"
-					>GitHub 文档</a
+					>GitHub docs</a
 				>
 				<a href="https://www.npmjs.com/package/agent-aura" target="_blank">npm</a>
-				<button type="button" data-lang-toggle>EN</button>
+				<button type="button" data-lang-toggle>中文</button>
 			</div>
 		</nav>
 
 		<header class="wrap">
 			<h1>API</h1>
 			<p class="lead" data-i18n-html="docs.lead">
-				四种特效同一套生命周期：<code>attach</code> 自动挂 canvas 并播放，<code>pause</code> /
+				六种特效同一套生命周期：<code>attach</code> 自动挂载并播放，<code>pause</code> /
 				<code>start</code> 控制循环，卸载时 <code>dispose()</code>。完整 Markdown 版在仓库
 				<code>docs/api.zh-CN.md</code>。
+			</p>
+			<p class="copy-hint" data-i18n="copy.hint">
+				提示词可直接改选择器 / 区域 / 参数，再复制给 Cursor / Claude。
 			</p>
 		</header>
 
@@ -244,11 +375,18 @@
 				<a href="#install" data-i18n="docs.toc.install">安装</a>
 				<a href="#aura" data-i18n="docs.toc.aura">aura</a>
 				<a href="#lifecycle" data-i18n="docs.toc.lifecycle">生命周期</a>
-				<a href="#mount" data-i18n="docs.toc.mount">Canvas 挂载</a>
+				<a href="#mount" data-i18n="docs.toc.mount">挂载</a>
 				<a href="#glow" data-i18n="docs.toc.glow">glow</a>
 				<a href="#border" data-i18n="docs.toc.border">border</a>
 				<a href="#fire" data-i18n="docs.toc.fire">fire</a>
 				<a href="#burning" data-i18n="docs.toc.burning">burning</a>
+				<a href="#shape" data-i18n="docs.toc.shape">shape</a>
+				<a href="#water" data-i18n="docs.toc.water">water</a>
+				<a href="#cultivation" data-i18n="docs.toc.cultivation">cultivation</a>
+				<a href="#demonic" data-i18n="docs.toc.demonic">demonic</a>
+				<a href="#thunder" data-i18n="docs.toc.thunder">thunder</a>
+				<a href="#void" data-i18n="docs.toc.void">void</a>
+				<a href="#glitch" data-i18n="docs.toc.glitch">glitch</a>
 				<a href="#framework" data-i18n="docs.toc.framework">框架</a>
 			</nav>
 
@@ -261,10 +399,20 @@ import { aura } from 'agent-aura'
 aura.glow('#hero')
 aura.border('#card')
 aura.fire('#card')
-aura.burning('#agent')</pre>
+aura.burning('#agent')
+aura.shape('#avatar')
+aura.water('#stream')
+aura.cultivation('#dao')
+aura.demonic('#mo')
+aura.thunder('#jie')
+aura.void('#hole')
+aura.glitch('#crash')</pre>
 				<p data-i18n-html="docs.install.cdn">
 					CDN：<code>https://unpkg.com/agent-aura/build/agent-aura.min.js</code>，全局
-					<code>AgentAura</code>。包是 ESM，没有 CJS。浏览器需要 WebGL2。
+					<code>AgentAura</code>。包是 ESM，没有 CJS。<code>glow</code> / <code>border</code> /
+					<code>fire</code> / <code>burning</code> / <code>thunder</code> / <code>shape</code> /
+					<code>water</code> / <code>cultivation</code> / <code>demonic</code> / <code>void</code> /
+					<code>glitch</code> 需要 WebGL2。
 				</p>
 
 				<h2 id="aura">aura</h2>
@@ -272,7 +420,14 @@ aura.burning('#agent')</pre>
 aura.glow(target, options?: GlowOptions): Glow
 aura.border(target, options?: AttachOptions&lt;MotionBorderOptions&gt;): MotionBorder
 aura.fire(target, options?: AttachOptions&lt;FireBorderOptions&gt;): FireBorder
-aura.burning(target, options?: AttachOptions&lt;BurningFireOptions&gt;): BurningFire</pre>
+aura.burning(target, options?: AttachOptions&lt;BurningFireOptions&gt;): BurningFire
+aura.shape(target, options?: AttachOptions&lt;ShapeAuraOptions&gt;): ShapeAura
+aura.water(target, options?: AttachOptions&lt;WaterAuraOptions&gt;): WaterAura
+aura.cultivation(target, options?: AttachOptions&lt;CultivationAuraOptions&gt;): CultivationAura
+aura.demonic(target, options?: AttachOptions&lt;DemonicAuraOptions&gt;): DemonicAura
+aura.thunder(target, options?: AttachOptions&lt;ThunderAuraOptions&gt;): ThunderAura
+aura.void(target, options?: AttachOptions&lt;VoidAuraOptions&gt;): VoidAura
+aura.glitch(target, options?: AttachOptions&lt;GlitchAuraOptions&gt;): GlitchAura</pre>
 				<p data-i18n-html="docs.aura.p">
 					<code>target</code> 是选择器或 <code>HTMLElement</code>。等价于对应 class 的
 					<code>attach()</code>。找不到节点抛 <code>agent-aura: target not found</code>。
@@ -311,7 +466,7 @@ fx.pause()
 fx.start()
 fx.dispose()</pre>
 
-				<h2 id="mount" data-i18n="docs.mount">Canvas 挂载</h2>
+				<h2 id="mount" data-i18n="docs.mount">挂载</h2>
 				<table>
 					<thead>
 						<tr>
@@ -342,19 +497,94 @@ fx.dispose()</pre>
 							</td>
 							<td data-i18n="docs.mount.firePos">铺满容器或视口，粒子沿 target 边框</td>
 						</tr>
+						<tr>
+							<td><code>thunder</code></td>
+							<td data-i18n-html="docs.mount.thunder">
+								<code>container</code> 或 <code>document.body</code>
+							</td>
+							<td data-i18n="docs.mount.thunderPos">铺满容器或视口，雷电沿 target 轮廓</td>
+						</tr>
+						<tr>
+							<td><code>void</code></td>
+							<td data-i18n-html="docs.mount.void">
+								<code>container</code> 或 <code>document.body</code>
+							</td>
+							<td data-i18n="docs.mount.voidPos">铺满容器或视口，黑洞光带沿 target 轮廓</td>
+						</tr>
+						<tr>
+							<td><code>glitch</code></td>
+							<td data-i18n-html="docs.mount.glitch">
+								<code>container</code> 或 <code>document.body</code>
+							</td>
+							<td data-i18n="docs.mount.glitchPos">铺满容器或视口，故障光带沿 target 轮廓</td>
+						</tr>
+						<tr>
+							<td><code>shape</code> / <code>water</code> / <code>cultivation</code> / <code>demonic</code></td>
+							<td data-i18n-html="docs.mount.cultivation">
+								<code>container</code> 或 <code>document.body</code>
+							</td>
+							<td data-i18n="docs.mount.cultivationPos">铺满容器或视口，灵气沿 target 轮廓</td>
+						</tr>
 					</tbody>
 				</table>
 				<pre>
 aura.border('#card', { container: '#stage' })
-aura.fire('#card', { container: '#stage' })</pre>
+aura.fire('#card', { container: '#stage' })
+aura.shape('#card', { container: '#stage' })
+aura.void('#hole', { container: '#stage' })
+aura.glitch('#crash', { container: '#stage' })</pre>
 				<p data-i18n-html="docs.mount.note">
-					卡片在 overflow / transform / 滚动容器里时必须传 <code>container</code>。
+					<code>border</code> / <code>fire</code> / <code>burning</code> / <code>thunder</code> /
+					<code>shape</code> / <code>water</code> / <code>cultivation</code> / <code>demonic</code> /
+					<code>void</code> / <code>glitch</code> 在 overflow / transform /
+					滚动容器里必须传 <code>container</code>。
 				</p>
 
 				<h2 id="glow">aura.glow</h2>
 				<p data-i18n-html="docs.glow.p">
 					流光遮罩。canvas 插在 target 里面。暗底用 <code>mode: 'dark'</code>。
 				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.glow">Glow · 给 AI：安装并挂到指定区域</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="glow"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="glow">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#0a0908"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="glow" spellcheck="false" rows="12"></textarea>
+				</div>
 				<pre>
 aura.glow('#hero', {
   mode: 'dark',
@@ -410,6 +640,47 @@ aura.glow('#hero', {
 
 				<h2 id="border">aura.border</h2>
 				<p data-i18n="docs.border.p">神经光场绕圆角边框流动。</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.border">Border · 给 AI：安装并挂到指定区域</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="border"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="border">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#0a0908"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="border" spellcheck="false" rows="12"></textarea>
+				</div>
 				<pre>
 aura.border('#neural-card', {
   container: '#neural-preview',
@@ -466,6 +737,47 @@ aura.border('#neural-card', {
 
 				<h2 id="fire">aura.fire</h2>
 				<p data-i18n="docs.fire.p">火焰沿边框烧。内部强制无烟、无热浪。</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.fire">Fire · 给 AI：安装并挂到指定区域</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="fire"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="fire">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#0a0908"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="fire" spellcheck="false" rows="12"></textarea>
+				</div>
 				<pre>
 aura.fire('#fire-card', {
   container: '#fire-preview',
@@ -505,6 +817,47 @@ aura.fire('#fire-card', {
 
 				<h2 id="burning">aura.burning</h2>
 				<p data-i18n="docs.burning.p">大火 + 烟雾 + 背景热浪。</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.burning">Burning · 给 AI：安装并挂到指定区域</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="burning"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="burning">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#0a0908"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="burning" spellcheck="false" rows="12"></textarea>
+				</div>
 				<pre>
 aura.burning('#burn-card', {
   container: '#burn-preview',
@@ -547,6 +900,722 @@ aura.burning('#burn-card', {
 					笔记本建议把粒子降到 600–1000，烟 150–300。离屏 <code>pause()</code>。
 				</p>
 
+				<h2 id="shape">aura.shape</h2>
+				<p data-i18n-html="docs.shape.p">
+					形状感知 AI 光环。WebGL2 沿轮廓的有宽度 ribbon + 外层柔光 + 能量尘，自动跟随目标的
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.shape">Shape · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="shape"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="shape">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#0a0908"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="shape" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.shape('#agent', {
+  container: '#stage',
+  offset: 5,
+  auraWidth: 33,
+  outerGlowWidth: 86,
+  dustCount: 75,
+  pathSamples: 500,
+  speed: 1,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>5</code></td>
+							<td data-i18n="docs.shape.offset">光带中心相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>auraWidth</code></td>
+							<td><code>33</code></td>
+							<td data-i18n="docs.shape.width">主光带半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>outerGlowWidth</code></td>
+							<td><code>86</code></td>
+							<td data-i18n="docs.shape.outer">外层柔光半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>dustCount</code></td>
+							<td><code>75</code></td>
+							<td data-i18n="docs.shape.dust">能量尘粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>pathSamples</code></td>
+							<td><code>500</code></td>
+							<td data-i18n="docs.shape.samples">轮廓采样点数</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.shape.speed">整体时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>24</code></td>
+							<td data-i18n="docs.shape.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2 id="water">aura.water</h2>
+				<p data-i18n-html="docs.water.p">
+					形状感知液态水流。SVG 扰动滤镜 + 高光折射 + 水珠，自动跟随
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.water">Water · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="water"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="water">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#0a0908"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="water" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.water('#agent', {
+  container: '#stage',
+  offset: 7,
+  fieldCount: 180,
+  detailCount: 110,
+  pathSamples: 420,
+  speed: 1,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>7</code></td>
+							<td data-i18n="docs.water.offset">水流光圈相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>fieldCount</code></td>
+							<td><code>180</code></td>
+							<td data-i18n="docs.water.field">外围水雾粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>detailCount</code></td>
+							<td><code>110</code></td>
+							<td data-i18n="docs.water.detail">沿轮廓的水珠粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>pathSamples</code></td>
+							<td><code>420</code></td>
+							<td data-i18n="docs.water.samples">轮廓采样点数</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.water.speed">整体时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>20</code></td>
+							<td data-i18n="docs.water.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+				<h2 id="cultivation">aura.cultivation</h2>
+				<p data-i18n-html="docs.cultivation.p">
+					形状感知金色修仙灵气。WebGL2 沿轮廓流转的金光脉 + 仙雾粒子 + 灵子，自动跟随
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.cultivation">Cultivation · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="cultivation"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="cultivation">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#100c0c"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="cultivation" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.cultivation('#agent', {
+  container: '#stage',
+  offset: 7,
+  fieldCount: 180,
+  detailCount: 110,
+  pathSamples: 420,
+  speed: 1,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>7</code></td>
+							<td data-i18n="docs.cultivation.offset">灵气光圈相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>fieldCount</code></td>
+							<td><code>180</code></td>
+							<td data-i18n="docs.cultivation.mist">外围仙雾粒子数量（fieldCount）</td>
+						</tr>
+						<tr>
+							<td><code>detailCount</code></td>
+							<td><code>110</code></td>
+							<td data-i18n="docs.cultivation.spirit">沿轮廓奔走的灵子数量（detailCount）</td>
+						</tr>
+						<tr>
+							<td><code>pathSamples</code></td>
+							<td><code>420</code></td>
+							<td data-i18n="docs.cultivation.samples">轮廓采样点数</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.cultivation.speed">整体时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>20</code></td>
+							<td data-i18n="docs.cultivation.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2 id="demonic">aura.demonic</h2>
+				<p data-i18n-html="docs.demonic.p">
+					形状感知紫黑魔气。SVG 魔雾扰动 + 旋转魔气流 + 黑金高光 + 魔焰粒子 + 魔纹 + 裂隙 + 内层侵蚀，自动跟随
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.demonic">Demonic · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="demonic"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="demonic">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#100c0c"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="demonic" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.demonic('#agent', {
+  container: '#stage',
+  offset: 7,
+  fieldCount: 180,
+  detailCount: 110,
+  pathSamples: 420,
+  speed: 1,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>7</code></td>
+							<td data-i18n="docs.demonic.offset">魔气光圈相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>fieldCount</code></td>
+							<td><code>180</code></td>
+							<td data-i18n="docs.demonic.field">外围魔雾粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>detailCount</code></td>
+							<td><code>110</code></td>
+							<td data-i18n="docs.demonic.detail">沿轮廓的魔焰粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>pathSamples</code></td>
+							<td><code>420</code></td>
+							<td data-i18n="docs.demonic.samples">轮廓采样点数</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.demonic.speed">整体时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>20</code></td>
+							<td data-i18n="docs.demonic.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+				<h2 id="thunder">aura.thunder</h2>
+				<p data-i18n-html="docs.thunder.p">
+					形状感知雷劫电弧。WebGL2 沿轮廓游走的雷霆边框 + 能量粒子 + 随机外放电弧，自动跟随
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.thunder">Thunder · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="thunder"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="thunder">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#100c0c"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="thunder" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.thunder('#agent', {
+  container: '#stage',
+  offset: 8,
+  particleCount: 90,
+  maxBranches: 16,
+  branchInterval: 85,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>8</code></td>
+							<td data-i18n="docs.thunder.offset">雷电光圈相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>particleCount</code></td>
+							<td><code>90</code></td>
+							<td data-i18n="docs.thunder.particles">沿轮廓奔走的能量粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>maxBranches</code></td>
+							<td><code>16</code></td>
+							<td data-i18n="docs.thunder.branches">同时存在的最大外放电弧数</td>
+						</tr>
+						<tr>
+							<td><code>branchInterval</code></td>
+							<td><code>85</code></td>
+							<td data-i18n="docs.thunder.interval">外放电弧生成间隔（毫秒级基准）</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>12</code></td>
+							<td data-i18n="docs.thunder.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2 id="void">aura.void</h2>
+				<p data-i18n-html="docs.void.p">
+					形状感知黑洞虚空。WebGL2 暗影光带 + 事件视界 + 紫白高光 + 虚空雾 + 星屑，自动跟随
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.void">Void · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="void"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="void">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#100c0c"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="void" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.void('#agent', {
+  container: '#stage',
+  offset: 6,
+  shadowWidth: 78,
+  horizonWidth: 30,
+  highlightWidth: 12,
+  mistCount: 190,
+  sparkCount: 95,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>6</code></td>
+							<td data-i18n="docs.void.offset">光圈相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>shadowWidth</code></td>
+							<td><code>78</code></td>
+							<td data-i18n="docs.void.shadow">暗影光带半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>horizonWidth</code></td>
+							<td><code>30</code></td>
+							<td data-i18n="docs.void.horizon">事件视界光带半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>highlightWidth</code></td>
+							<td><code>12</code></td>
+							<td data-i18n="docs.void.highlight">高光带半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>mistCount</code></td>
+							<td><code>190</code></td>
+							<td data-i18n="docs.void.mist">虚空雾粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>sparkCount</code></td>
+							<td><code>95</code></td>
+							<td data-i18n="docs.void.sparks">星屑粒子数量</td>
+						</tr>
+						<tr>
+							<td><code>pathSamples</code></td>
+							<td><code>520</code></td>
+							<td data-i18n="docs.void.samples">轮廓采样点数</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.void.speed">整体时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>24</code></td>
+							<td data-i18n="docs.void.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2 id="glitch">aura.glitch</h2>
+				<p data-i18n-html="docs.glitch.p">
+					形状感知故障崩坏。WebGL2 RGB 错位 + 数字撕裂 + 边缘断层 + 方形数据碎片，自动跟随
+					<code>border-radius</code> 和 <code>clip-path</code>。
+				</p>
+				<div class="prompt-block">
+					<div class="prompt-head">
+						<strong data-i18n="copy.block.glitch">Glitch · 给 AI：安装并挂到指定元素</strong>
+						<div class="prompt-actions">
+							<button
+								type="button"
+								class="prompt-reset"
+								data-reset-prompt="glitch"
+								data-i18n="copy.reset"
+							>
+								重置
+							</button>
+							<button type="button" class="copy-prompt" data-copy-prompt="glitch">
+								<svg viewBox="0 0 16 16" aria-hidden="true">
+									<rect
+										x="5.2"
+										y="1.8"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+									<rect
+										x="2.8"
+										y="4.2"
+										width="8"
+										height="10"
+										rx="1.4"
+										fill="#100c0c"
+										stroke="currentColor"
+										stroke-width="1.3"
+									/>
+								</svg>
+								<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+							</button>
+						</div>
+					</div>
+					<textarea data-prompt-preview="glitch" spellcheck="false" rows="12"></textarea>
+				</div>
+				<pre>
+const fx = aura.glitch('#agent', {
+  container: '#stage',
+  offset: 5,
+  outerWidth: 45,
+  rgbWidth: 11,
+  fragmentCount: 130,
+})</pre>
+				<table>
+					<thead>
+						<tr>
+							<th data-i18n="docs.th.field">字段</th>
+							<th data-i18n="docs.th.default">默认</th>
+							<th data-i18n="docs.th.note">说明</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>offset</code></td>
+							<td><code>5</code></td>
+							<td data-i18n="docs.glitch.offset">光圈相对元素外扩的像素距离</td>
+						</tr>
+						<tr>
+							<td><code>outerWidth</code></td>
+							<td><code>45</code></td>
+							<td data-i18n="docs.glitch.outer">外层噪声光带半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>rgbWidth</code></td>
+							<td><code>11</code></td>
+							<td data-i18n="docs.glitch.rgb">RGB 错位光带半宽（像素）</td>
+						</tr>
+						<tr>
+							<td><code>fragmentCount</code></td>
+							<td><code>130</code></td>
+							<td data-i18n="docs.glitch.fragments">数据碎片数量</td>
+						</tr>
+						<tr>
+							<td><code>burstIntervalMin</code></td>
+							<td><code>900</code></td>
+							<td data-i18n="docs.glitch.burstMin">崩坏爆发最短间隔（毫秒）</td>
+						</tr>
+						<tr>
+							<td><code>burstIntervalMax</code></td>
+							<td><code>2600</code></td>
+							<td data-i18n="docs.glitch.burstMax">崩坏爆发最长间隔（毫秒）</td>
+						</tr>
+						<tr>
+							<td><code>burstDuration</code></td>
+							<td><code>140</code></td>
+							<td data-i18n="docs.glitch.burstDur">单次爆发持续时间（毫秒）</td>
+						</tr>
+						<tr>
+							<td><code>pathSamples</code></td>
+							<td><code>500</code></td>
+							<td data-i18n="docs.glitch.samples">轮廓采样点数</td>
+						</tr>
+						<tr>
+							<td><code>speed</code></td>
+							<td><code>1</code></td>
+							<td data-i18n="docs.glitch.speed">整体时间倍率</td>
+						</tr>
+						<tr>
+							<td><code>cornerSegments</code></td>
+							<td><code>22</code></td>
+							<td data-i18n="docs.glitch.corners">圆角采样分段数</td>
+						</tr>
+					</tbody>
+				</table>
+
 				<h2 id="framework" data-i18n="docs.framework">框架</h2>
 				<pre>
 // React
@@ -560,15 +1629,17 @@ onMounted(() => { fx = aura.fire(card.value) })
 onBeforeUnmount(() => fx?.dispose())</pre>
 				<p data-i18n-html="docs.framework.p">
 					class 导出：<code>Glow</code>、<code>MotionBorder</code>、<code>FireBorder</code>、
-					<code>BurningFire</code>。<code>new X()</code> 不会自动 append / start，要用
-					<code>X.attach()</code>。
+					<code>BurningFire</code>、<code>ShapeAura</code>、<code>WaterAura</code>、<code>CultivationAura</code>、<code>DemonicAura</code>、<code>ThunderAura</code>、<code>VoidAura</code>、<code>GlitchAura</code>。推荐使用
+					<code>aura.*</code> 或 <code>X.attach()</code>。
 				</p>
 			</article>
 		</div>
 		<script type="module">
+			import { initCopyPromptButtons } from './ai-prompts.js'
 			import { initI18n } from './i18n.js'
 
 			initI18n()
+			initCopyPromptButtons()
 		</script>
 	</body>
 </html>

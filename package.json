@@ -4,7 +4,7 @@
     "private": false,
     "license": "MIT",
     "type": "module",
-    "description": "Zero-dependency WebGL2 effects for Agent UIs: stream glow masks, neural energy borders, burning fire, and overclock-life flames.",
+    "description": "Zero-dependency effects for Agent UIs: stream glow, neural borders, fire, overclock flames, shape-aware ribbon aura, WebGL2 water / golden cultivation / demonic mist fields, thunder tribulation arcs, void blackhole ribbons, and glitch collapse tears.",
     "keywords": [
         "webgl",
         "webgl2",
@@ -15,7 +15,16 @@
         "fire",
         "border",
         "glow",
-        "particles"
+        "particles",
+        "shape-aware",
+        "water",
+        "cultivation",
+        "demonic",
+        "thunder",
+        "lightning",
+        "void",
+        "blackhole",
+        "glitch"
     ],
     "author": {
         "name": "wangmiao",

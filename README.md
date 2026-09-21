@@ -5,7 +5,7 @@
 
 **English | [中文](README.zh-CN.md)**
 
-Zero-dependency WebGL2 effects for Agent UIs.
+Zero-dependency effects for Agent UIs.
 
 | API            | Effect                                    | Typical use                       |
 | -------------- | ----------------------------------------- | --------------------------------- |
@@ -13,10 +13,17 @@ Zero-dependency WebGL2 effects for Agent UIs.
 | `aura.border`  | Neural energy field around a rounded rect | Thinking / reasoning / active     |
 | `aura.fire`    | Fire along a DOM border                   | Danger / executing / ignition     |
 | `aura.burning` | Heavy fire + smoke + heat haze            | Overclock / burning-life          |
+| `aura.shape`   | Shape-aware WebGL2 ribbon aura            | Circle / pill / polygon           |
+| `aura.water`   | Shape-aware WebGL2 water field            | Streaming / thinking / liquid     |
+| `aura.cultivation` | Shape-aware WebGL2 golden mist         | Immortal UI / character panels    |
+| `aura.demonic` | Shape-aware WebGL2 purple-black mist      | Overdrive / forbidden / overload  |
+| `aura.thunder`  | Shape-aware thunder / tribulation arcs    | Ultra-thinking / tribulation      |
+| `aura.void`     | Shape-aware void / blackhole ribbon       | Abyss / overload / event horizon  |
+| `aura.glitch`   | Shape-aware RGB tear / collapse glitch    | Crash / retry / system error      |
 
 ✨ **[Live Demo](https://wangmiaozero.github.io/agent-aura/)** · **[API Reference](./docs/api.md)**
 
-Demo and API pages switch English / 中文 (`?lang=en` or `?lang=zh`).
+Demo and API pages default to English. Switch with `?lang=en` or `?lang=zh`.
 
 ## Install
 
@@ -24,7 +31,7 @@ Demo and API pages switch English / 中文 (`?lang=en` or `?lang=zh`).
 npm install agent-aura
 ```
 
-Requires Node.js 18+ (Node 24 works). Browser needs WebGL2. ESM only (`"type": "module"`); CDN IIFE is also provided.
+Requires Node.js 18+ (Node 24 works). `glow` / `border` / `fire` / `burning` / `thunder` / `shape` / `water` / `cultivation` / `demonic` / `void` / `glitch` need WebGL2. ESM only (`"type": "module"`); CDN IIFE is also provided.
 
 ```ts
 import { aura } from 'agent-aura'
@@ -41,6 +48,13 @@ aura.glow('#hero')
 aura.border('#card')
 aura.fire('#card')
 aura.burning('#agent')
+aura.shape('#avatar')
+aura.water('#stream')
+aura.cultivation('#dao')
+aura.demonic('#mo')
+aura.thunder('#jie')
+aura.void('#hole')
+aura.glitch('#crash')
 ```
 
 CDN:
@@ -53,6 +67,16 @@ CDN:
 ```
 
 Same file on jsDelivr: `https://cdn.jsdelivr.net/npm/agent-aura/build/agent-aura.min.js`
+
+## Prompts for AI
+
+The eleven demo cards and the API page have an editable **Copy AI prompt**. Change the selector / area, then paste into Cursor / Claude so it will:
+
+1. `npm install agent-aura`
+2. Wire it into this project
+3. Attach the effect to the UI area you specify
+
+Full prompts: [API → Prompts for AI](./docs/api.md#prompts-for-ai)
 
 ## Options
 
@@ -81,6 +105,59 @@ aura.burning('#agent', {
     container: '#stage',
     smokeCount: 300,
     glow: true,
+})
+
+aura.shape('#avatar', {
+    container: '#stage',
+    offset: 5,
+    auraWidth: 33,
+    outerGlowWidth: 86,
+    dustCount: 75,
+    speed: 1,
+})
+
+aura.water('#stream', {
+    container: '#stage',
+    offset: 7,
+    fieldCount: 180,
+    detailCount: 110,
+    speed: 1,
+})
+
+aura.cultivation('#dao', {
+    container: '#stage',
+    offset: 7,
+    fieldCount: 180,
+    detailCount: 110,
+    speed: 1,
+})
+
+aura.demonic('#mo', {
+    container: '#stage',
+    offset: 7,
+    fieldCount: 180,
+    detailCount: 110,
+    speed: 1,
+})
+
+aura.thunder('#jie', {
+    container: '#stage',
+    offset: 8,
+    particleCount: 90,
+    maxBranches: 16,
+})
+
+aura.void('#hole', {
+    container: '#stage',
+    offset: 6,
+    mistCount: 190,
+    sparkCount: 95,
+})
+
+aura.glitch('#crash', {
+    container: '#stage',
+    offset: 5,
+    fragmentCount: 130,
 })
 ```
 
@@ -118,30 +195,44 @@ onBeforeUnmount(() => fx?.dispose())
 ## Canvas mounting
 
 - `glow` — canvas is a child of the target (`position: absolute; inset: 0`)
-- `border` / `fire` / `burning` — canvas overlays the target; pass `container` so it lives in your wrapper instead of `document.body`
+- `border` / `fire` / `burning` / `thunder` / `shape` / `water` / `cultivation` / `demonic` / `void` / `glitch` — canvas overlays the target; pass `container` so it lives in your wrapper instead of `document.body`
 
 ```ts
 aura.fire('#card', { container: '#stage' })
+aura.shape('#avatar', { container: '#stage' })
+aura.water('#stream', { container: '#stage' })
+aura.cultivation('#dao', { container: '#stage' })
+aura.demonic('#mo', { container: '#stage' })
+aura.thunder('#jie', { container: '#stage' })
+aura.void('#hole', { container: '#stage' })
+aura.glitch('#crash', { container: '#stage' })
 ```
 
-Needed when the card is inside overflow / transform / a scrolling pane. Details in [API → Canvas mounting](./docs/api.md#canvas-mounting).
+Pass `container` for `border` / `fire` / `burning` / `thunder` / `shape` / `water` / `cultivation` / `demonic` / `void` / `glitch` when the card is inside overflow / transform / a scrolling pane. Details in [API → Mounting](./docs/api.md#mounting).
 
 ## Class API
 
 Same effects if you want to wire DOM yourself. `attach()` still handles mount + start. `new Glow()` / `new FireBorder()` does **not**.
 
 ```ts
-import { BurningFire, FireBorder, Glow, MotionBorder } from 'agent-aura'
+import { BurningFire, CultivationAura, DemonicAura, FireBorder, GlitchAura, Glow, MotionBorder, ShapeAura, ThunderAura, VoidAura, WaterAura } from 'agent-aura'
 
 const fx = FireBorder.attach('#card', { particleCount: 800 })
 MotionBorder.attach('#card', { container: '#stage' })
+ShapeAura.attach('#avatar')
+WaterAura.attach('#stream')
+CultivationAura.attach('#dao', { container: '#stage' })
+DemonicAura.attach('#mo')
+ThunderAura.attach('#jie', { container: '#stage' })
+VoidAura.attach('#hole', { container: '#stage' })
+GlitchAura.attach('#crash', { container: '#stage' })
 ```
 
 `Glow` also has `resize`, `autoResize`, `fadeIn`, `fadeOut`.
 
 ## Requirements
 
-- WebGL2
+- `glow` / `border` / `fire` / `burning` / `thunder` / `shape` / `water` / `cultivation` / `demonic` / `void` / `glitch`: WebGL2
 - Modern Chromium / Firefox / Safari
 - No runtime dependencies
 
@@ -149,7 +240,7 @@ Selector must match an `HTMLElement` (first match only). Missing target throws `
 
 ## Performance
 
-Fire cost scales with `particleCount` / `smokeCount`. Drop them on laptops. Pause off-screen instances. Do not stack many `burning` effects on weak GPUs.
+Fire cost scales with `particleCount` / `smokeCount`. Drop them on laptops. `water` / `cultivation` / `demonic` share the ShapeField WebGL2 engine — keep `fieldCount` / `detailCount` modest. Pause off-screen instances. Do not stack many `burning` effects on weak GPUs.
 
 ## Development
 
@@ -159,7 +250,7 @@ npm run build  # minified ESM + IIFE + types
 npm start      # serve index.html with ./build/*.js
 ```
 
-`index.html` is the live gallery. It imports `./build/index.js` after build.
+`index.html` is the catalog. Each effect has its own page (`glow.html`, `shape.html`, …) that imports `./build/index.js` after build.
 
 ## Publish
 

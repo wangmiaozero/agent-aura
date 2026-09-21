@@ -17,8 +17,8 @@ void main() {
 	float dist = distance(vUv, center);
 	float pulse = 0.5 + 0.5 * sin(uTime * 2.2);
 
-	float redAura = smoothstep(0.7, 0.12, dist) * 0.12;
-	float coreAura = smoothstep(0.36, 0.0, dist) * (0.06 + pulse * 0.05);
+	float redAura = smoothstep(0.78, 0.1, dist) * 0.22;
+	float coreAura = smoothstep(0.42, 0.0, dist) * (0.1 + pulse * 0.08);
 
 	vec3 color = vec3(
 		redAura + coreAura,
@@ -28,5 +28,5 @@ void main() {
 
 	float alpha = max(color.r, max(color.g, color.b));
 	if (alpha < 0.004) discard;
-	outColor = vec4(color, alpha);
+	outColor = vec4(color * alpha, alpha);
 }

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-i18n-page="home">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura · Shape</title>
+		<link rel="stylesheet" href="./site.css" />
+		<style>
+			.figure-stage {
+				background: radial-gradient(circle at 50% 42%, #152234 0%, #090d14 43%, #030405 100%);
+			}
+			.figure {
+				background: linear-gradient(145deg, #182333, #0b0f16);
+				color: #dff7ff;
+				border-color: rgba(140, 190, 255, 0.14);
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<a class="brand" href="./index.html">Agent Aura</a>
+			<div class="links">
+				<a href="./index.html" data-i18n="nav.demo">演示</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<button type="button" data-lang-toggle>中文</button>
+			</div>
+		</nav>
+		<main class="demo-wrap">
+			<header class="demo-head">
+				<div class="tag" data-i18n="home.shapeTag">Shape · Ribbon Aura</div>
+				<h1 data-i18n="home.shapeTitle">SHAPE AURA</h1>
+				<p data-i18n="home.shapeDesc">
+					WebGL2 沿轮廓的有宽度光带 + 外层柔光 + 能量尘，自动跟随 border-radius / clip-path。
+				</p>
+			</header>
+			<div class="figure-grid">
+				<div class="figure-stage" id="shape-hex-stage">
+					<div class="figure is-hex" id="shape-hex">AGENT</div>
+				</div>
+				<div class="figure-stage" id="shape-circle-stage">
+					<div class="figure is-circle" id="shape-circle">
+						<span class="figure-label" data-i18n="demo.circle">圆形</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="shape-pill-stage">
+					<div class="figure is-pill" id="shape-pill">
+						<span class="figure-label" data-i18n="demo.streaming">流式输出</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="shape-diamond-stage">
+					<div class="figure is-diamond" id="shape-diamond">AI</div>
+				</div>
+				<div class="figure-stage" id="shape-card-stage">
+					<div class="figure is-card" id="shape-card">
+						<span class="figure-label" data-i18n="demo.thinking">思考中</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="shape-shield-stage">
+					<div class="figure is-shield" id="shape-shield">Aura</div>
+				</div>
+			</div>
+			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
+				提示词可直接改选择器 / 区域 / 参数，再复制给 Cursor / Claude。
+			</p>
+			<div class="prompt-block">
+				<div class="prompt-head">
+					<strong data-i18n="copy.block.shape">Shape · 给 AI：安装并挂到指定元素</strong>
+					<div class="prompt-actions">
+						<button type="button" class="prompt-reset" data-reset-prompt="shape" data-i18n="copy.reset">重置</button>
+						<button type="button" class="copy-prompt" data-copy-prompt="shape">
+							<span data-copy-label data-i18n="copy.prompt">复制 AI 提示词</span>
+						</button>
+					</div>
+				</div>
+				<textarea data-prompt-preview="shape" spellcheck="false" rows="12"></textarea>
+			</div>
+		</main>
+		<script type="module">
+			import { bootDemo } from './demo-boot.js'
+			bootDemo((aura) => {
+				const light = { dustCount: 40, auraWidth: 22, outerGlowWidth: 58, skipGreeting: true }
+				aura.shape('#shape-hex', { container: '#shape-hex-stage', offset: 5, auraWidth: 33, outerGlowWidth: 86, dustCount: 75 })
+				aura.shape('#shape-circle', { container: '#shape-circle-stage', offset: 6, ...light })
+				aura.shape('#shape-pill', { container: '#shape-pill-stage', offset: 5, ...light })
+				aura.shape('#shape-diamond', { container: '#shape-diamond-stage', offset: 6, ...light })
+				aura.shape('#shape-card', { container: '#shape-card-stage', offset: 5, ...light })
+				aura.shape('#shape-shield', { container: '#shape-shield-stage', offset: 6, ...light })
+			})
+		</script>
+	</body>
+</html>
