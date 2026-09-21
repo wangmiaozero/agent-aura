@@ -427,7 +427,11 @@ export class ThunderAura {
 		})
 	}
 
-	private drawLine(positions: Float32Array, color: [number, number, number], opacity: number): void {
+	private drawLine(
+		positions: Float32Array,
+		color: [number, number, number],
+		opacity: number
+	): void {
 		const gl = this.gl
 		const view = this.viewBox()
 		gl.useProgram(this.lineProgram)

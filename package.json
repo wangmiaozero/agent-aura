@@ -1,6 +1,6 @@
 {
     "name": "agent-aura",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "private": false,
     "license": "MIT",
     "type": "module",
@@ -42,6 +42,80 @@
             "types": "./build/index.d.ts",
             "import": "./build/index.js",
             "default": "./build/index.js"
+        },
+        "./fire": {
+            "types": "./build/fire/index.d.ts",
+            "import": "./build/fire/index.js"
+        },
+        "./glow": {
+            "types": "./build/glow/index.d.ts",
+            "import": "./build/glow/index.js"
+        },
+        "./border": {
+            "types": "./build/border/index.d.ts",
+            "import": "./build/border/index.js"
+        },
+        "./shape": {
+            "types": "./build/shape/index.d.ts",
+            "import": "./build/shape/index.js"
+        },
+        "./water": {
+            "types": "./build/water/index.d.ts",
+            "import": "./build/water/index.js"
+        },
+        "./cultivation": {
+            "types": "./build/cultivation/index.d.ts",
+            "import": "./build/cultivation/index.js"
+        },
+        "./demonic": {
+            "types": "./build/demonic/index.d.ts",
+            "import": "./build/demonic/index.js"
+        },
+        "./thunder": {
+            "types": "./build/thunder/index.d.ts",
+            "import": "./build/thunder/index.js"
+        },
+        "./void": {
+            "types": "./build/void/index.d.ts",
+            "import": "./build/void/index.js"
+        },
+        "./glitch": {
+            "types": "./build/glitch/index.d.ts",
+            "import": "./build/glitch/index.js"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "fire": [
+                "./build/fire/index.d.ts"
+            ],
+            "glow": [
+                "./build/glow/index.d.ts"
+            ],
+            "border": [
+                "./build/border/index.d.ts"
+            ],
+            "shape": [
+                "./build/shape/index.d.ts"
+            ],
+            "water": [
+                "./build/water/index.d.ts"
+            ],
+            "cultivation": [
+                "./build/cultivation/index.d.ts"
+            ],
+            "demonic": [
+                "./build/demonic/index.d.ts"
+            ],
+            "thunder": [
+                "./build/thunder/index.d.ts"
+            ],
+            "void": [
+                "./build/void/index.d.ts"
+            ],
+            "glitch": [
+                "./build/glitch/index.d.ts"
+            ]
         }
     },
     "files": [
@@ -65,11 +139,16 @@
         "dev": "npm run build:lib && vite -c vite.config.ts",
         "preview": "npm run build:demo && vite preview -c vite.config.ts --outDir build-demo",
         "build:demo": "npm run build && node scripts/copy-demo.js",
-        "build:lib": "vite build -c vite.lib.config.ts",
-        "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json",
+        "build:lib": "vite build -c vite.lib.config.ts && vite build -c vite.iife.config.ts",
+        "build:types": "tsc --emitDeclarationOnly -p tsconfig.build.json && node scripts/write-subpath-types.js",
         "build": "npm run build:lib && npm run build:types",
         "prepublishOnly": "npm run build",
         "typecheck": "tsc --noEmit",
+        "check:exports": "node scripts/check-exports.js",
+        "check:size": "node scripts/check-bundle-size.js",
+        "check:shake": "node scripts/check-tree-shake.js",
+        "check:pack": "node scripts/check-pack.js",
+        "check": "npm run check:exports && npm run check:size && npm run check:shake && npm run check:pack",
         "lint": "eslint . && prettier --check \"**/*.{ts,js,json,md}\"",
         "format": "prettier --write \"**/*.{ts,js,json,md}\"",
         "prepare": "husky || true"

@@ -16,6 +16,10 @@ import {
 	resolveTarget,
 } from './dom'
 import { createProgram } from './gl/program'
+import dustFrag from './shape/shaders/dust.frag.glsl'
+import dustVert from './shape/shaders/dust.vert.glsl'
+import ribbonFrag from './shape/shaders/ribbon.frag.glsl'
+import ribbonVert from './shape/shaders/ribbon.vert.glsl'
 import {
 	type PathData,
 	type PathSample,
@@ -25,10 +29,6 @@ import {
 	getPointOnPath,
 	randFloat,
 } from './thunder/path'
-import dustFrag from './shape/shaders/dust.frag.glsl'
-import dustVert from './shape/shaders/dust.vert.glsl'
-import ribbonFrag from './shape/shaders/ribbon.frag.glsl'
-import ribbonVert from './shape/shaders/ribbon.vert.glsl'
 
 export type ShapeAuraOptions = {
 	target?: HTMLElement

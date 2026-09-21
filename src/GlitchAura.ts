@@ -16,6 +16,10 @@ import {
 	resolveTarget,
 } from './dom'
 import { createProgram } from './gl/program'
+import glitchFrag from './glitch/shaders/glitch.frag.glsl'
+import pointFrag from './glitch/shaders/point.frag.glsl'
+import pointVert from './glitch/shaders/point.vert.glsl'
+import ribbonVert from './glitch/shaders/ribbon.vert.glsl'
 import {
 	type PathData,
 	type PathSample,
@@ -25,10 +29,6 @@ import {
 	getPointOnPath,
 	randFloat,
 } from './thunder/path'
-import glitchFrag from './glitch/shaders/glitch.frag.glsl'
-import pointFrag from './glitch/shaders/point.frag.glsl'
-import pointVert from './glitch/shaders/point.vert.glsl'
-import ribbonVert from './glitch/shaders/ribbon.vert.glsl'
 
 export type GlitchAuraOptions = {
 	target?: HTMLElement
@@ -533,7 +533,10 @@ export class GlitchAura {
 			this.burstTimer = randFloat(this.options.burstIntervalMin, this.options.burstIntervalMax)
 		}
 		if (this.burst > 0) {
-			this.burst = Math.max(0, this.burst - (delta * 1000 * this.options.speed) / this.options.burstDuration)
+			this.burst = Math.max(
+				0,
+				this.burst - (delta * 1000 * this.options.speed) / this.options.burstDuration
+			)
 		}
 	}
 
@@ -596,8 +599,13 @@ export class GlitchAura {
 			const normalOffset = p.offset + glitch1 * 8 + explosion
 			const tangentOffset = glitch2 * (5 + this.burst * 25)
 			const horizontalTear = Math.abs(glitch1) > 0.88 ? glitch2 * 18 : 0
-			positions[i * 2] = info.point.x + info.normal.x * normalOffset + info.tangent.x * tangentOffset + horizontalTear
-			positions[i * 2 + 1] = info.point.y + info.normal.y * normalOffset + info.tangent.y * tangentOffset
+			positions[i * 2] =
+				info.point.x +
+				info.normal.x * normalOffset +
+				info.tangent.x * tangentOffset +
+				horizontalTear
+			positions[i * 2 + 1] =
+				info.point.y + info.normal.y * normalOffset + info.tangent.y * tangentOffset
 			sizes[i] = p.size * (0.55 + Math.abs(glitch1) * 1.2 + this.burst * 1.4)
 			const flicker = Math.random() > 0.16 ? 1 : 0.05
 			alphas[i] = p.alpha * flicker * (0.5 + this.burst * 0.8)

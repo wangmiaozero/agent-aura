@@ -10,6 +10,7 @@
 ## 目录
 
 - [安装](#安装)
+- [导入策略](#导入策略)
 - [给 AI 的提示词](#给-ai-的提示词)
 - [入口](#入口)
 - [aura](#aura)
@@ -55,6 +56,27 @@ CDN（IIFE，全局 `AgentAura`）：
 jsDelivr：`https://cdn.jsdelivr.net/npm/agent-aura/build/agent-aura.min.js`
 
 包是 `"type": "module"`，只提供 ESM + 浏览器 IIFE，没有 CJS。
+
+## 导入策略
+
+生产项目请用子路径：
+
+```ts
+import { fire } from 'agent-aura/fire'
+import { voidAura } from 'agent-aura/void'
+
+const fx = fire('#agent')
+```
+
+低频状态：
+
+```ts
+const { glitch } = await import('agent-aura/glitch')
+```
+
+Demo / 原型可以继续 `import { aura } from 'agent-aura'`。完整说明：[imports.zh-CN.md](./imports.zh-CN.md)。
+
+`aura.void()` 保持不变。子路径函数叫 `voidAura()`，因为 `void` 是保留字。
 
 ## 给 AI 的提示词
 
@@ -211,23 +233,24 @@ const fx = aura.burning(target, {
 
 ## 入口
 
-| 导出                                                                                                                         | 说明                                                 |
-| ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `aura`                                                                                                                       | 一句话 API，推荐                                     |
-| `default`                                                                                                                    | 同 `aura`                                            |
-| `Glow`                                                                                                                       | 流光遮罩 class                                       |
-| `MotionBorder`                                                                                                               | 神经光场边框 class                                   |
-| `FireBorder`                                                                                                                 | 火焰边框 class                                       |
-| `BurningFire`                                                                                                                | 超频燃烧 class                                       |
-| `ShapeAura`                                                                                                                  | 自适应形状光环 class                                 |
-| `WaterAura`                                                                                                                  | 自适应液态水流 class                                 |
-| `CultivationAura`                                                                                                            | 形状感知金色修仙灵气 class                           |
-| `DemonicAura`                                                                                                                | 形状感知紫黑魔气 class                               |
-| `ThunderAura`                                                                                                                | 形状感知雷劫电弧 class                               |
-| `VoidAura`                                                                                                                   | 形状感知黑洞虚空 class                               |
-| `GlitchAura`                                                                                                                 | 形状感知故障崩坏 class                               |
-| `TargetRef`                                                                                                                  | `string \| HTMLElement`                              |
-| `AttachOptions<T>`                                                                                                           | 去掉 `target`/`container` 后，`container` 可传选择器 |
+| 导出                                                                                                                                                                                                                                            | 说明                                                 |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `aura`                                                                                                                                                                                                                                          | 一句话 API，适合 Demo；生产请用子路径                |
+| `default`                                                                                                                                                                                                                                       | 同 `aura`                                            |
+| `fire` / `burning` / `glow` / `border` / `shape` / `water` / `cultivation` / `demonic` / `thunder` / `voidAura` / `glitch`                                                                                                                      | 子路径函数，根包也会再导出                           |
+| `Glow`                                                                                                                                                                                                                                          | 流光遮罩 class                                       |
+| `MotionBorder`                                                                                                                                                                                                                                  | 神经光场边框 class                                   |
+| `FireBorder`                                                                                                                                                                                                                                    | 火焰边框 class                                       |
+| `BurningFire`                                                                                                                                                                                                                                   | 超频燃烧 class                                       |
+| `ShapeAura`                                                                                                                                                                                                                                     | 自适应形状光环 class                                 |
+| `WaterAura`                                                                                                                                                                                                                                     | 自适应液态水流 class                                 |
+| `CultivationAura`                                                                                                                                                                                                                               | 形状感知金色修仙灵气 class                           |
+| `DemonicAura`                                                                                                                                                                                                                                   | 形状感知紫黑魔气 class                               |
+| `ThunderAura`                                                                                                                                                                                                                                   | 形状感知雷劫电弧 class                               |
+| `VoidAura`                                                                                                                                                                                                                                      | 形状感知黑洞虚空 class                               |
+| `GlitchAura`                                                                                                                                                                                                                                    | 形状感知故障崩坏 class                               |
+| `TargetRef`                                                                                                                                                                                                                                     | `string \| HTMLElement`                              |
+| `AttachOptions<T>`                                                                                                                                                                                                                              | 去掉 `target`/`container` 后，`container` 可传选择器 |
 | `GlowOptions` / `MotionBorderOptions` / `FireBorderOptions` / `BurningFireOptions` / `ShapeAuraOptions` / `WaterAuraOptions` / `CultivationAuraOptions` / `DemonicAuraOptions` / `ThunderAuraOptions` / `VoidAuraOptions` / `GlitchAuraOptions` | 各效果配置                                           |
 
 `aura.x(target, options)` 等价于 `X.attach(target, options)`。
@@ -293,15 +316,15 @@ fx.dispose()
 
 ## 挂载
 
-| API                | 挂到哪                                                   | 定位                                              | 跟随方式                       |
-| ------------------ | -------------------------------------------------------- | ------------------------------------------------- | ------------------------------ |
-| `glow`             | **target 内部**                                          | `absolute; inset: 0`                              | 跟 target 尺寸                 |
-| `border`           | `container`，否则非 body 的 parent，否则 `document.body` | container 内 `absolute`，否则 `fixed`             | 按 target 矩形 + `glowPadding` |
-| `fire` / `burning` | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 粒子沿 target 边框采样         |
-| `thunder`          | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 雷电沿 target 轮廓             |
-| `void`             | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 黑洞光带沿 target 轮廓         |
-| `glitch`           | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 故障光带沿 target 轮廓         |
-| `shape` / `water` / `cultivation` / `demonic` | `container` 或 `document.body`      | container 内铺满 `absolute`，否则铺满视口 `fixed` | 气场沿 target 轮廓             |
+| API                                           | 挂到哪                                                   | 定位                                              | 跟随方式                       |
+| --------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------- | ------------------------------ |
+| `glow`                                        | **target 内部**                                          | `absolute; inset: 0`                              | 跟 target 尺寸                 |
+| `border`                                      | `container`，否则非 body 的 parent，否则 `document.body` | container 内 `absolute`，否则 `fixed`             | 按 target 矩形 + `glowPadding` |
+| `fire` / `burning`                            | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 粒子沿 target 边框采样         |
+| `thunder`                                     | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 雷电沿 target 轮廓             |
+| `void`                                        | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 黑洞光带沿 target 轮廓         |
+| `glitch`                                      | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 故障光带沿 target 轮廓         |
+| `shape` / `water` / `cultivation` / `demonic` | `container` 或 `document.body`                           | container 内铺满 `absolute`，否则铺满视口 `fixed` | 气场沿 target 轮廓             |
 
 `attach()` 会把 `position: static` 的挂载父级改成 `relative`。
 
@@ -550,7 +573,6 @@ const fx = aura.water('#agent', {
 
 canvas 挂到 `container` 或 `document.body`，铺满容器或视口。支持 `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`。
 
-
 ## aura.cultivation / CultivationAura
 
 形状感知金色修仙灵气。与 water / demonic 共用 ShapeField 引擎（theme: `immortal`）：金光脉 + 仙雾场 + 灵子，自动读取目标的 `border-radius` 和 `clip-path`。
@@ -568,25 +590,24 @@ const fx = aura.cultivation('#agent', {
 
 ### CultivationAuraOptions
 
-| 字段             | 类型                           | 默认    | 说明                              |
-| ---------------- | ------------------------------ | ------- | --------------------------------- |
-| `container`      | `HTMLElement`                  | —       | 挂载 canvas 的定位容器            |
-| `offset`         | `number`                       | `7`     | 灵气光圈相对元素外扩的像素        |
-| `fieldCount`     | `number`                       | `180`   | 外围仙雾粒子数量                  |
-| `detailCount`    | `number`                       | `110`   | 沿轮廓奔走的灵子数量              |
-| `pathSamples`    | `number`                       | `420`   | 轮廓采样点数                      |
-| `speed`          | `number`                       | `1`     | 整体时间倍率                      |
-| `cornerSegments` | `number`                       | `20`    | 圆角采样分段数                    |
-| `mistCount`      | `number`                       | —       | 已弃用，等同 `fieldCount`         |
-| `spiritCount`    | `number`                       | —       | 已弃用，等同 `detailCount`        |
-| `auraSamples`    | `number`                       | —       | 已弃用，等同 `pathSamples`        |
-| `zIndex`         | `number`                       | `20`    | canvas 层级                       |
-| `classNames`     | `string`                       | —       | canvas class                      |
-| `styles`         | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式                   |
-| `skipGreeting`   | `boolean`                      | `false` | 关闭 console 欢迎信息             |
+| 字段             | 类型                           | 默认    | 说明                       |
+| ---------------- | ------------------------------ | ------- | -------------------------- |
+| `container`      | `HTMLElement`                  | —       | 挂载 canvas 的定位容器     |
+| `offset`         | `number`                       | `7`     | 灵气光圈相对元素外扩的像素 |
+| `fieldCount`     | `number`                       | `180`   | 外围仙雾粒子数量           |
+| `detailCount`    | `number`                       | `110`   | 沿轮廓奔走的灵子数量       |
+| `pathSamples`    | `number`                       | `420`   | 轮廓采样点数               |
+| `speed`          | `number`                       | `1`     | 整体时间倍率               |
+| `cornerSegments` | `number`                       | `20`    | 圆角采样分段数             |
+| `mistCount`      | `number`                       | —       | 已弃用，等同 `fieldCount`  |
+| `spiritCount`    | `number`                       | —       | 已弃用，等同 `detailCount` |
+| `auraSamples`    | `number`                       | —       | 已弃用，等同 `pathSamples` |
+| `zIndex`         | `number`                       | `20`    | canvas 层级                |
+| `classNames`     | `string`                       | —       | canvas class               |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式            |
+| `skipGreeting`   | `boolean`                      | `false` | 关闭 console 欢迎信息      |
 
 canvas 挂到 `container` 或 `document.body`，铺满容器或视口。支持 `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`。
-
 
 ## aura.demonic / DemonicAura
 
@@ -621,7 +642,6 @@ const fx = aura.demonic('#agent', {
 
 canvas 挂到 `container` 或 `document.body`，铺满容器或视口。支持 `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`。
 
-
 ## aura.thunder / ThunderAura
 
 形状感知雷劫电弧。从 Three.js 雷电场 demo 移植为零依赖 WebGL2：沿轮廓游走的雷霆边框 + 能量粒子 + 随机外放电弧，自动读取目标的 `border-radius` 和 `clip-path`。
@@ -638,18 +658,18 @@ const fx = aura.thunder('#agent', {
 
 ### ThunderAuraOptions
 
-| 字段              | 类型                           | 默认    | 说明                         |
-| ----------------- | ------------------------------ | ------- | ---------------------------- |
-| `container`       | `HTMLElement`                  | —       | 挂载 canvas 的定位容器       |
-| `offset`          | `number`                       | `8`     | 雷电光圈相对元素外扩的像素   |
-| `particleCount`   | `number`                       | `90`    | 沿轮廓奔走的能量粒子数量     |
-| `maxBranches`     | `number`                       | `16`    | 同时存在的最大外放电弧数     |
-| `branchInterval`  | `number`                       | `85`    | 外放电弧生成间隔基准（毫秒） |
-| `cornerSegments`  | `number`                       | `12`    | 圆角采样分段数               |
-| `zIndex`          | `number`                       | `20`    | canvas 层级                  |
-| `classNames`      | `string`                       | —       | canvas class                 |
-| `styles`          | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式              |
-| `skipGreeting`    | `boolean`                      | `false` | 关闭 console 欢迎信息        |
+| 字段             | 类型                           | 默认    | 说明                         |
+| ---------------- | ------------------------------ | ------- | ---------------------------- |
+| `container`      | `HTMLElement`                  | —       | 挂载 canvas 的定位容器       |
+| `offset`         | `number`                       | `8`     | 雷电光圈相对元素外扩的像素   |
+| `particleCount`  | `number`                       | `90`    | 沿轮廓奔走的能量粒子数量     |
+| `maxBranches`    | `number`                       | `16`    | 同时存在的最大外放电弧数     |
+| `branchInterval` | `number`                       | `85`    | 外放电弧生成间隔基准（毫秒） |
+| `cornerSegments` | `number`                       | `12`    | 圆角采样分段数               |
+| `zIndex`         | `number`                       | `20`    | canvas 层级                  |
+| `classNames`     | `string`                       | —       | canvas class                 |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式              |
+| `skipGreeting`   | `boolean`                      | `false` | 关闭 console 欢迎信息        |
 
 canvas 挂到 `container` 或 `document.body`，铺满容器或视口。支持 `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`。
 
@@ -671,22 +691,22 @@ const fx = aura.void('#agent', {
 
 ### VoidAuraOptions
 
-| 字段              | 类型                           | 默认    | 说明                     |
-| ----------------- | ------------------------------ | ------- | ------------------------ |
-| `container`       | `HTMLElement`                  | —       | 挂载 canvas 的定位容器   |
-| `offset`          | `number`                       | `6`     | 光圈相对元素外扩的像素   |
-| `shadowWidth`     | `number`                       | `78`    | 暗影光带半宽（像素）     |
-| `horizonWidth`    | `number`                       | `30`    | 事件视界光带半宽（像素） |
-| `highlightWidth`  | `number`                       | `12`    | 高光带半宽（像素）       |
-| `mistCount`       | `number`                       | `190`   | 虚空雾粒子数量           |
-| `sparkCount`      | `number`                       | `95`    | 星屑粒子数量             |
-| `pathSamples`     | `number`                       | `520`   | 轮廓采样点数             |
-| `speed`           | `number`                       | `1`     | 整体时间倍率             |
-| `cornerSegments`  | `number`                       | `24`    | 圆角采样分段数           |
-| `zIndex`          | `number`                       | `20`    | canvas 层级              |
-| `classNames`      | `string`                       | —       | canvas class             |
-| `styles`          | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式          |
-| `skipGreeting`    | `boolean`                      | `false` | 关闭 console 欢迎信息    |
+| 字段             | 类型                           | 默认    | 说明                     |
+| ---------------- | ------------------------------ | ------- | ------------------------ |
+| `container`      | `HTMLElement`                  | —       | 挂载 canvas 的定位容器   |
+| `offset`         | `number`                       | `6`     | 光圈相对元素外扩的像素   |
+| `shadowWidth`    | `number`                       | `78`    | 暗影光带半宽（像素）     |
+| `horizonWidth`   | `number`                       | `30`    | 事件视界光带半宽（像素） |
+| `highlightWidth` | `number`                       | `12`    | 高光带半宽（像素）       |
+| `mistCount`      | `number`                       | `190`   | 虚空雾粒子数量           |
+| `sparkCount`     | `number`                       | `95`    | 星屑粒子数量             |
+| `pathSamples`    | `number`                       | `520`   | 轮廓采样点数             |
+| `speed`          | `number`                       | `1`     | 整体时间倍率             |
+| `cornerSegments` | `number`                       | `24`    | 圆角采样分段数           |
+| `zIndex`         | `number`                       | `20`    | canvas 层级              |
+| `classNames`     | `string`                       | —       | canvas class             |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式          |
+| `skipGreeting`   | `boolean`                      | `false` | 关闭 console 欢迎信息    |
 
 canvas 挂到 `container` 或 `document.body`，铺满容器或视口。支持 `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`。
 
@@ -706,23 +726,23 @@ const fx = aura.glitch('#agent', {
 
 ### GlitchAuraOptions
 
-| 字段                | 类型                           | 默认     | 说明                     |
-| ------------------- | ------------------------------ | -------- | ------------------------ |
-| `container`         | `HTMLElement`                  | —        | 挂载 canvas 的定位容器   |
-| `offset`            | `number`                       | `5`      | 光圈相对元素外扩的像素   |
-| `outerWidth`        | `number`                       | `45`     | 外层噪声光带半宽（像素） |
-| `rgbWidth`          | `number`                       | `11`     | RGB 错位光带半宽（像素） |
-| `fragmentCount`     | `number`                       | `130`    | 数据碎片数量             |
-| `burstIntervalMin`  | `number`                       | `900`    | 崩坏爆发最短间隔（毫秒） |
-| `burstIntervalMax`  | `number`                       | `2600`   | 崩坏爆发最长间隔（毫秒） |
-| `burstDuration`     | `number`                       | `140`    | 单次爆发持续时间（毫秒） |
-| `pathSamples`       | `number`                       | `500`    | 轮廓采样点数             |
-| `speed`             | `number`                       | `1`      | 整体时间倍率             |
-| `cornerSegments`    | `number`                       | `22`     | 圆角采样分段数           |
-| `zIndex`            | `number`                       | `20`     | canvas 层级              |
-| `classNames`        | `string`                       | —        | canvas class             |
-| `styles`            | `Partial<CSSStyleDeclaration>` | —        | canvas 内联样式          |
-| `skipGreeting`      | `boolean`                      | `false`  | 关闭 console 欢迎信息    |
+| 字段               | 类型                           | 默认    | 说明                     |
+| ------------------ | ------------------------------ | ------- | ------------------------ |
+| `container`        | `HTMLElement`                  | —       | 挂载 canvas 的定位容器   |
+| `offset`           | `number`                       | `5`     | 光圈相对元素外扩的像素   |
+| `outerWidth`       | `number`                       | `45`    | 外层噪声光带半宽（像素） |
+| `rgbWidth`         | `number`                       | `11`    | RGB 错位光带半宽（像素） |
+| `fragmentCount`    | `number`                       | `130`   | 数据碎片数量             |
+| `burstIntervalMin` | `number`                       | `900`   | 崩坏爆发最短间隔（毫秒） |
+| `burstIntervalMax` | `number`                       | `2600`  | 崩坏爆发最长间隔（毫秒） |
+| `burstDuration`    | `number`                       | `140`   | 单次爆发持续时间（毫秒） |
+| `pathSamples`      | `number`                       | `500`   | 轮廓采样点数             |
+| `speed`            | `number`                       | `1`     | 整体时间倍率             |
+| `cornerSegments`   | `number`                       | `22`    | 圆角采样分段数           |
+| `zIndex`           | `number`                       | `20`    | canvas 层级              |
+| `classNames`       | `string`                       | —       | canvas class             |
+| `styles`           | `Partial<CSSStyleDeclaration>` | —       | canvas 内联样式          |
+| `skipGreeting`     | `boolean`                      | `false` | 关闭 console 欢迎信息    |
 
 canvas 挂到 `container` 或 `document.body`，铺满容器或视口。支持 `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`。
 

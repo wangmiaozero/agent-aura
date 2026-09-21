@@ -14,6 +14,19 @@
 				color: #f1f1f5;
 				border-color: rgba(255, 255, 255, 0.08);
 			}
+			#glitch-lazy-btn {
+				appearance: none;
+				border: 1px solid rgba(255, 255, 255, 0.18);
+				background: rgba(12, 12, 16, 0.72);
+				color: #f1f1f5;
+				padding: 8px 12px;
+				border-radius: 8px;
+				cursor: pointer;
+				font: inherit;
+			}
+			#glitch-lazy-btn:hover {
+				border-color: rgba(255, 90, 180, 0.7);
+			}
 		</style>
 	</head>
 	<body>
@@ -60,6 +73,13 @@
 						<span class="figure-label" data-i18n="demo.danger">Danger</span>
 					</div>
 				</div>
+				<div class="figure-stage" id="glitch-lazy-stage">
+					<div class="figure is-card" id="glitch-lazy">
+						<button type="button" id="glitch-lazy-btn" data-i18n="demo.lazyLoad">
+							Lazy-load Glitch
+						</button>
+					</div>
+				</div>
 			</div>
 			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
 				Edit the prompt (selector, area, options), then copy it for Cursor / Claude.
@@ -87,6 +107,24 @@
 				aura.glitch('#glitch-card', { container: '#glitch-card-stage', offset: 5, ...light })
 				aura.glitch('#glitch-diamond', { container: '#glitch-diamond-stage', offset: 5, ...light })
 				aura.glitch('#glitch-shield', { container: '#glitch-shield-stage', offset: 6, ...light })
+			})
+			const lazyBtn = document.querySelector('#glitch-lazy-btn')
+			lazyBtn?.addEventListener('click', async () => {
+				lazyBtn.disabled = true
+				try {
+					const { glitch } = await import('./build/glitch/index.js')
+					glitch('#glitch-lazy', {
+						container: '#glitch-lazy-stage',
+						skipGreeting: true,
+						fragmentCount: 64,
+					})
+					lazyBtn.remove()
+				} catch (error) {
+					console.error(error)
+					lazyBtn.disabled = false
+					const hint = document.querySelector('[data-build-hint]')
+					if (hint) hint.textContent = 'Run npm run build first, then refresh.'
+				}
 			})
 		</script>
 	</body>

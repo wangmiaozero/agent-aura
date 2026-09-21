@@ -144,7 +144,7 @@ export function getPointOnPath(data: PathData, t: number): PathSample {
 			normal: { x: 0, y: 1 },
 		}
 	}
-	let distance = ((((t % 1) + 1) % 1) * total)
+	let distance = (((t % 1) + 1) % 1) * total
 	for (let i = 0; i < lengths.length; i++) {
 		if (distance <= lengths[i]) {
 			const a = path[i]

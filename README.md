@@ -7,19 +7,19 @@
 
 Zero-dependency effects for Agent UIs.
 
-| API            | Effect                                    | Typical use                       |
-| -------------- | ----------------------------------------- | --------------------------------- |
-| `aura.glow`    | Stream glow mask                          | Workspace, dialog, card highlight |
-| `aura.border`  | Neural energy field around a rounded rect | Thinking / reasoning / active     |
-| `aura.fire`    | Fire along a DOM border                   | Danger / executing / ignition     |
-| `aura.burning` | Heavy fire + smoke + heat haze            | Overclock / burning-life          |
-| `aura.shape`   | Shape-aware WebGL2 ribbon aura            | Circle / pill / polygon           |
-| `aura.water`   | Shape-aware WebGL2 water field            | Streaming / thinking / liquid     |
-| `aura.cultivation` | Shape-aware WebGL2 golden mist         | Immortal UI / character panels    |
-| `aura.demonic` | Shape-aware WebGL2 purple-black mist      | Overdrive / forbidden / overload  |
-| `aura.thunder`  | Shape-aware thunder / tribulation arcs    | Ultra-thinking / tribulation      |
-| `aura.void`     | Shape-aware void / blackhole ribbon       | Abyss / overload / event horizon  |
-| `aura.glitch`   | Shape-aware RGB tear / collapse glitch    | Crash / retry / system error      |
+| API                | Effect                                    | Typical use                       |
+| ------------------ | ----------------------------------------- | --------------------------------- |
+| `aura.glow`        | Stream glow mask                          | Workspace, dialog, card highlight |
+| `aura.border`      | Neural energy field around a rounded rect | Thinking / reasoning / active     |
+| `aura.fire`        | Fire along a DOM border                   | Danger / executing / ignition     |
+| `aura.burning`     | Heavy fire + smoke + heat haze            | Overclock / burning-life          |
+| `aura.shape`       | Shape-aware WebGL2 ribbon aura            | Circle / pill / polygon           |
+| `aura.water`       | Shape-aware WebGL2 water field            | Streaming / thinking / liquid     |
+| `aura.cultivation` | Shape-aware WebGL2 golden mist            | Immortal UI / character panels    |
+| `aura.demonic`     | Shape-aware WebGL2 purple-black mist      | Overdrive / forbidden / overload  |
+| `aura.thunder`     | Shape-aware thunder / tribulation arcs    | Ultra-thinking / tribulation      |
+| `aura.void`        | Shape-aware void / blackhole ribbon       | Abyss / overload / event horizon  |
+| `aura.glitch`      | Shape-aware RGB tear / collapse glitch    | Crash / retry / system error      |
 
 ✨ **[Live Demo](https://wangmiaozero.github.io/agent-aura/)** · **[API Reference](./docs/api.md)**
 
@@ -35,6 +35,33 @@ Requires Node.js 18+ (Node 24 works). `glow` / `border` / `fire` / `burning` / `
 
 ```ts
 import { aura } from 'agent-aura'
+```
+
+## Recommended: Import Only What You Use
+
+Production apps should import a single effect:
+
+```ts
+import { fire } from 'agent-aura/fire'
+
+const fx = fire('#agent')
+```
+
+That keeps unused effects (water, thunder, void, glitch, …) out of the bundle. See [Import Strategy](./docs/imports.md).
+
+Full convenience API — fine for demos and prototypes:
+
+```ts
+import { aura } from 'agent-aura'
+
+aura.fire('#agent')
+```
+
+Rare states can load later:
+
+```ts
+const { glitch } = await import('agent-aura/glitch')
+glitch('#crash')
 ```
 
 ## Quick Start
@@ -215,7 +242,19 @@ Pass `container` for `border` / `fire` / `burning` / `thunder` / `shape` / `wate
 Same effects if you want to wire DOM yourself. `attach()` still handles mount + start. `new Glow()` / `new FireBorder()` does **not**.
 
 ```ts
-import { BurningFire, CultivationAura, DemonicAura, FireBorder, GlitchAura, Glow, MotionBorder, ShapeAura, ThunderAura, VoidAura, WaterAura } from 'agent-aura'
+import {
+    BurningFire,
+    CultivationAura,
+    DemonicAura,
+    FireBorder,
+    GlitchAura,
+    Glow,
+    MotionBorder,
+    ShapeAura,
+    ThunderAura,
+    VoidAura,
+    WaterAura,
+} from 'agent-aura'
 
 const fx = FireBorder.attach('#card', { particleCount: 800 })
 MotionBorder.attach('#card', { container: '#stage' })
@@ -250,7 +289,7 @@ npm run build  # minified ESM + IIFE + types
 npm start      # serve index.html with ./build/*.js
 ```
 
-`index.html` is the catalog. Each effect has its own page (`glow.html`, `shape.html`, …) that imports `./build/index.js` after build.
+`index.html` is the catalog. Each effect has its own page (`glow.html`, `shape.html`, …) that imports `./build/index.js` after build. Subpath files land in `build/fire/index.js`, `build/glitch/index.js`, and so on.
 
 ## Publish
 

@@ -8,10 +8,7 @@
  * @repository https://github.com/wangmiaozero/agent-aura
  */
 import type { AttachOptions, TargetRef } from './dom'
-import {
-	ShapeFieldAura,
-	type ShapeFieldAuraOptions,
-} from './shape-field/ShapeFieldAura'
+import { ShapeFieldAura, type ShapeFieldAuraOptions } from './shape-field/ShapeFieldAura'
 
 export type DemonicAuraOptions = Omit<ShapeFieldAuraOptions, 'mode'>
 

@@ -10,6 +10,7 @@ Zero-dependency effects. `glow` / `border` / `fire` / `burning` / `thunder` / `s
 ## Contents
 
 - [Install](#install)
+- [Import Strategy](#import-strategy)
 - [Prompts for AI](#prompts-for-ai)
 - [Entry](#entry)
 - [aura](#aura)
@@ -55,6 +56,27 @@ CDN (IIFE, global `AgentAura`):
 jsDelivr: `https://cdn.jsdelivr.net/npm/agent-aura/build/agent-aura.min.js`
 
 The package is `"type": "module"`: ESM + browser IIFE only. No CJS.
+
+## Import Strategy
+
+Production: import one subpath.
+
+```ts
+import { fire } from 'agent-aura/fire'
+import { voidAura } from 'agent-aura/void'
+
+const fx = fire('#agent')
+```
+
+Rare states:
+
+```ts
+const { glitch } = await import('agent-aura/glitch')
+```
+
+Demos / prototypes can keep `import { aura } from 'agent-aura'`. Full table: [imports.md](./imports.md).
+
+`aura.void()` is unchanged. The subpath function is `voidAura()` because `void` is reserved.
 
 ## Prompts for AI
 
@@ -203,23 +225,24 @@ Install agent-aura and attach the liquid Water Aura to the UI element I specify.
 
 ## Entry
 
-| Export                                                                                                                       | Role                                                                |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `aura`                                                                                                                       | One-call API. Prefer this.                                          |
-| `default`                                                                                                                    | Same as `aura`                                                      |
-| `Glow`                                                                                                                       | Glow-mask class                                                     |
-| `MotionBorder`                                                                                                               | Neural energy-border class                                          |
-| `FireBorder`                                                                                                                 | Fire-along-border class                                             |
-| `BurningFire`                                                                                                                | Overclock / burning-life class                                      |
-| `ShapeAura`                                                                                                                  | Shape-aware WebGL2 ribbon aura class                                |
-| `WaterAura`                                                                                                                  | Shape-aware liquid water class                                      |
-| `CultivationAura`                                                                                                           | Shape-aware golden cultivation class                               |
-| `DemonicAura`                                                                                                               | Shape-aware purple-black demonic class                             |
-| `ThunderAura`                                                                                                               | Shape-aware thunder / tribulation class                            |
-| `VoidAura`                                                                                                                  | Shape-aware void / blackhole ribbon class                          |
-| `GlitchAura`                                                                                                                | Shape-aware RGB tear / collapse class                              |
-| `TargetRef`                                                                                                                  | `string \| HTMLElement`                                             |
-| `AttachOptions<T>`                                                                                                           | Options without `target`/`container`; `container` may be a selector |
+| Export                                                                                                                                                                                                                                          | Role                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `aura`                                                                                                                                                                                                                                          | One-call API. Fine for demos. Prefer subpaths in production.        |
+| `default`                                                                                                                                                                                                                                       | Same as `aura`                                                      |
+| `fire` / `burning` / `glow` / `border` / `shape` / `water` / `cultivation` / `demonic` / `thunder` / `voidAura` / `glitch`                                                                                                                      | Subpath-friendly functions; also re-exported from the root package  |
+| `Glow`                                                                                                                                                                                                                                          | Glow-mask class                                                     |
+| `MotionBorder`                                                                                                                                                                                                                                  | Neural energy-border class                                          |
+| `FireBorder`                                                                                                                                                                                                                                    | Fire-along-border class                                             |
+| `BurningFire`                                                                                                                                                                                                                                   | Overclock / burning-life class                                      |
+| `ShapeAura`                                                                                                                                                                                                                                     | Shape-aware WebGL2 ribbon aura class                                |
+| `WaterAura`                                                                                                                                                                                                                                     | Shape-aware liquid water class                                      |
+| `CultivationAura`                                                                                                                                                                                                                               | Shape-aware golden cultivation class                                |
+| `DemonicAura`                                                                                                                                                                                                                                   | Shape-aware purple-black demonic class                              |
+| `ThunderAura`                                                                                                                                                                                                                                   | Shape-aware thunder / tribulation class                             |
+| `VoidAura`                                                                                                                                                                                                                                      | Shape-aware void / blackhole ribbon class                           |
+| `GlitchAura`                                                                                                                                                                                                                                    | Shape-aware RGB tear / collapse class                               |
+| `TargetRef`                                                                                                                                                                                                                                     | `string \| HTMLElement`                                             |
+| `AttachOptions<T>`                                                                                                                                                                                                                              | Options without `target`/`container`; `container` may be a selector |
 | `GlowOptions` / `MotionBorderOptions` / `FireBorderOptions` / `BurningFireOptions` / `ShapeAuraOptions` / `WaterAuraOptions` / `CultivationAuraOptions` / `DemonicAuraOptions` / `ThunderAuraOptions` / `VoidAuraOptions` / `GlitchAuraOptions` | Per-effect options                                                  |
 
 `aura.x(target, options)` is `X.attach(target, options)`.
@@ -285,15 +308,15 @@ Always `dispose()` on unmount or you leak WebGL / rAF.
 
 ## Mounting
 
-| API                | Parent                                                  | Positioning                                        | Follow                             |
-| ------------------ | ------------------------------------------------------- | -------------------------------------------------- | ---------------------------------- |
-| `glow`             | **inside target**                                       | `absolute; inset: 0`                               | target size                        |
-| `border`           | `container`, else non-body parent, else `document.body` | `absolute` in container, else `fixed`              | target rect + `glowPadding`        |
-| `fire` / `burning` | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | particles sampled on target border |
-| `thunder`          | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | lightning follows target outline   |
-| `void`             | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | void ribbon follows target outline |
-| `glitch`           | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | glitch ribbon follows target outline |
-| `shape` / `water` / `cultivation` / `demonic` | `container` or `document.body`     | fills container (`absolute`) or viewport (`fixed`) | field follows target outline       |
+| API                                           | Parent                                                  | Positioning                                        | Follow                               |
+| --------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------- | ------------------------------------ |
+| `glow`                                        | **inside target**                                       | `absolute; inset: 0`                               | target size                          |
+| `border`                                      | `container`, else non-body parent, else `document.body` | `absolute` in container, else `fixed`              | target rect + `glowPadding`          |
+| `fire` / `burning`                            | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | particles sampled on target border   |
+| `thunder`                                     | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | lightning follows target outline     |
+| `void`                                        | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | void ribbon follows target outline   |
+| `glitch`                                      | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | glitch ribbon follows target outline |
+| `shape` / `water` / `cultivation` / `demonic` | `container` or `document.body`                          | fills container (`absolute`) or viewport (`fixed`) | field follows target outline         |
 
 `attach()` sets a static mount parent to `position: relative`.
 
@@ -526,22 +549,21 @@ const fx = aura.water('#agent', {
 
 ### WaterAuraOptions
 
-| Field            | Type                           | Default | Notes                           |
-| ---------------- | ------------------------------ | ------- | ------------------------------- |
-| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas |
-| `offset`         | `number`                       | `7`     | Outward offset of the water ring|
-| `fieldCount`     | `number`                       | `180`   | Outer mist particle count       |
-| `detailCount`    | `number`                       | `110`   | Droplets along the outline      |
-| `pathSamples`    | `number`                       | `420`   | Outline sample count            |
-| `speed`          | `number`                       | `1`     | Global time scale               |
-| `cornerSegments` | `number`                       | `20`    | Corner sampling segments        |
-| `zIndex`         | `number`                       | `20`    | Canvas z-index                  |
-| `classNames`     | `string`                       | —       | Canvas class                    |
-| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles            |
-| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting        |
+| Field            | Type                           | Default | Notes                            |
+| ---------------- | ------------------------------ | ------- | -------------------------------- |
+| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas  |
+| `offset`         | `number`                       | `7`     | Outward offset of the water ring |
+| `fieldCount`     | `number`                       | `180`   | Outer mist particle count        |
+| `detailCount`    | `number`                       | `110`   | Droplets along the outline       |
+| `pathSamples`    | `number`                       | `420`   | Outline sample count             |
+| `speed`          | `number`                       | `1`     | Global time scale                |
+| `cornerSegments` | `number`                       | `20`    | Corner sampling segments         |
+| `zIndex`         | `number`                       | `20`    | Canvas z-index                   |
+| `classNames`     | `string`                       | —       | Canvas class                     |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles             |
+| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting         |
 
 Canvas mounts on `container` or `document.body` and fills that view. Supports `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`.
-
 
 ## aura.cultivation / CultivationAura
 
@@ -560,25 +582,24 @@ const fx = aura.cultivation('#agent', {
 
 ### CultivationAuraOptions
 
-| Field            | Type                           | Default | Notes                                      |
-| ---------------- | ------------------------------ | ------- | ------------------------------------------ |
-| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas            |
-| `offset`         | `number`                       | `7`     | Outward offset of the spirit ring          |
-| `fieldCount`     | `number`                       | `180`   | Outer mist particle count                  |
-| `detailCount`    | `number`                       | `110`   | Spirit motes along the outline             |
-| `pathSamples`    | `number`                       | `420`   | Outline sample count                       |
-| `speed`          | `number`                       | `1`     | Global time scale                          |
-| `cornerSegments` | `number`                       | `20`    | Corner sampling segments                   |
-| `mistCount`      | `number`                       | —       | Deprecated alias of `fieldCount`           |
-| `spiritCount`    | `number`                       | —       | Deprecated alias of `detailCount`          |
-| `auraSamples`    | `number`                       | —       | Deprecated alias of `pathSamples`          |
-| `zIndex`         | `number`                       | `20`    | Canvas z-index                             |
-| `classNames`     | `string`                       | —       | Canvas class                               |
-| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles                       |
-| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting                   |
+| Field            | Type                           | Default | Notes                             |
+| ---------------- | ------------------------------ | ------- | --------------------------------- |
+| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas   |
+| `offset`         | `number`                       | `7`     | Outward offset of the spirit ring |
+| `fieldCount`     | `number`                       | `180`   | Outer mist particle count         |
+| `detailCount`    | `number`                       | `110`   | Spirit motes along the outline    |
+| `pathSamples`    | `number`                       | `420`   | Outline sample count              |
+| `speed`          | `number`                       | `1`     | Global time scale                 |
+| `cornerSegments` | `number`                       | `20`    | Corner sampling segments          |
+| `mistCount`      | `number`                       | —       | Deprecated alias of `fieldCount`  |
+| `spiritCount`    | `number`                       | —       | Deprecated alias of `detailCount` |
+| `auraSamples`    | `number`                       | —       | Deprecated alias of `pathSamples` |
+| `zIndex`         | `number`                       | `20`    | Canvas z-index                    |
+| `classNames`     | `string`                       | —       | Canvas class                      |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles              |
+| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting          |
 
 Canvas mounts on `container` or `document.body` and fills that view. Supports `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`.
-
 
 ## aura.demonic / DemonicAura
 
@@ -597,22 +618,21 @@ const fx = aura.demonic('#agent', {
 
 ### DemonicAuraOptions
 
-| Field            | Type                           | Default | Notes                           |
-| ---------------- | ------------------------------ | ------- | ------------------------------- |
-| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas |
+| Field            | Type                           | Default | Notes                              |
+| ---------------- | ------------------------------ | ------- | ---------------------------------- |
+| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas    |
 | `offset`         | `number`                       | `7`     | Outward offset of the demonic ring |
-| `fieldCount`     | `number`                       | `180`   | Outer mist particle count       |
-| `detailCount`    | `number`                       | `110`   | Ember particles along the outline |
-| `pathSamples`    | `number`                       | `420`   | Outline sample count            |
-| `speed`          | `number`                       | `1`     | Global time scale               |
-| `cornerSegments` | `number`                       | `20`    | Corner sampling segments        |
-| `zIndex`         | `number`                       | `20`    | Canvas z-index                  |
-| `classNames`     | `string`                       | —       | Canvas class                    |
-| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles            |
-| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting        |
+| `fieldCount`     | `number`                       | `180`   | Outer mist particle count          |
+| `detailCount`    | `number`                       | `110`   | Ember particles along the outline  |
+| `pathSamples`    | `number`                       | `420`   | Outline sample count               |
+| `speed`          | `number`                       | `1`     | Global time scale                  |
+| `cornerSegments` | `number`                       | `20`    | Corner sampling segments           |
+| `zIndex`         | `number`                       | `20`    | Canvas z-index                     |
+| `classNames`     | `string`                       | —       | Canvas class                       |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles               |
+| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting           |
 
 Canvas mounts on `container` or `document.body` and fills that view. Supports `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`.
-
 
 ## aura.thunder / ThunderAura
 
@@ -630,18 +650,18 @@ const fx = aura.thunder('#agent', {
 
 ### ThunderAuraOptions
 
-| Field            | Type                           | Default | Notes                              |
-| ---------------- | ------------------------------ | ------- | ---------------------------------- |
-| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas    |
+| Field            | Type                           | Default | Notes                                |
+| ---------------- | ------------------------------ | ------- | ------------------------------------ |
+| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas      |
 | `offset`         | `number`                       | `8`     | Outward offset of the lightning ring |
-| `particleCount`  | `number`                       | `90`    | Energy particles along the outline |
-| `maxBranches`    | `number`                       | `16`    | Max simultaneous outward arcs      |
-| `branchInterval` | `number`                       | `85`    | Branch spawn interval baseline (ms)|
-| `cornerSegments` | `number`                       | `12`    | Corner sampling segments           |
-| `zIndex`         | `number`                       | `20`    | Canvas z-index                     |
-| `classNames`     | `string`                       | —       | Canvas class                       |
-| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles               |
-| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting           |
+| `particleCount`  | `number`                       | `90`    | Energy particles along the outline   |
+| `maxBranches`    | `number`                       | `16`    | Max simultaneous outward arcs        |
+| `branchInterval` | `number`                       | `85`    | Branch spawn interval baseline (ms)  |
+| `cornerSegments` | `number`                       | `12`    | Corner sampling segments             |
+| `zIndex`         | `number`                       | `20`    | Canvas z-index                       |
+| `classNames`     | `string`                       | —       | Canvas class                         |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles                 |
+| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting             |
 
 Canvas mounts on `container` or `document.body` and fills that view. Supports `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`.
 
@@ -663,22 +683,22 @@ const fx = aura.void('#agent', {
 
 ### VoidAuraOptions
 
-| Field            | Type                           | Default | Notes                              |
-| ---------------- | ------------------------------ | ------- | ---------------------------------- |
-| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas    |
-| `offset`         | `number`                       | `6`     | Outward offset of the ring in px   |
-| `shadowWidth`    | `number`                       | `78`    | Shadow ribbon half-width in px     |
-| `horizonWidth`   | `number`                       | `30`    | Event-horizon ribbon half-width    |
-| `highlightWidth` | `number`                       | `12`    | Highlight ribbon half-width        |
-| `mistCount`      | `number`                       | `190`   | Void mist particle count           |
-| `sparkCount`     | `number`                       | `95`    | Spark particle count               |
-| `pathSamples`    | `number`                       | `520`   | Outline sample count               |
-| `speed`          | `number`                       | `1`     | Global time scale                  |
-| `cornerSegments` | `number`                       | `24`    | Corner sampling segments           |
-| `zIndex`         | `number`                       | `20`    | Canvas z-index                     |
-| `classNames`     | `string`                       | —       | Canvas class                       |
-| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles               |
-| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting           |
+| Field            | Type                           | Default | Notes                            |
+| ---------------- | ------------------------------ | ------- | -------------------------------- |
+| `container`      | `HTMLElement`                  | —       | Positioning host for the canvas  |
+| `offset`         | `number`                       | `6`     | Outward offset of the ring in px |
+| `shadowWidth`    | `number`                       | `78`    | Shadow ribbon half-width in px   |
+| `horizonWidth`   | `number`                       | `30`    | Event-horizon ribbon half-width  |
+| `highlightWidth` | `number`                       | `12`    | Highlight ribbon half-width      |
+| `mistCount`      | `number`                       | `190`   | Void mist particle count         |
+| `sparkCount`     | `number`                       | `95`    | Spark particle count             |
+| `pathSamples`    | `number`                       | `520`   | Outline sample count             |
+| `speed`          | `number`                       | `1`     | Global time scale                |
+| `cornerSegments` | `number`                       | `24`    | Corner sampling segments         |
+| `zIndex`         | `number`                       | `20`    | Canvas z-index                   |
+| `classNames`     | `string`                       | —       | Canvas class                     |
+| `styles`         | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles             |
+| `skipGreeting`   | `boolean`                      | `false` | Disable console greeting         |
 
 Canvas mounts on `container` or `document.body` and fills that view. Supports `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`.
 
@@ -698,23 +718,23 @@ const fx = aura.glitch('#agent', {
 
 ### GlitchAuraOptions
 
-| Field               | Type                           | Default | Notes                              |
-| ------------------- | ------------------------------ | ------- | ---------------------------------- |
-| `container`         | `HTMLElement`                  | —       | Positioning host for the canvas    |
-| `offset`            | `number`                       | `5`     | Outward offset of the ring in px   |
-| `outerWidth`        | `number`                       | `45`    | Outer noise ribbon half-width      |
-| `rgbWidth`          | `number`                       | `11`    | RGB-split ribbon half-width        |
-| `fragmentCount`     | `number`                       | `130`   | Data-fragment particle count       |
-| `burstIntervalMin`  | `number`                       | `900`   | Min burst interval in ms           |
-| `burstIntervalMax`  | `number`                       | `2600`  | Max burst interval in ms           |
-| `burstDuration`     | `number`                       | `140`   | Burst duration in ms               |
-| `pathSamples`       | `number`                       | `500`   | Outline sample count               |
-| `speed`             | `number`                       | `1`     | Global time scale                  |
-| `cornerSegments`    | `number`                       | `22`    | Corner sampling segments           |
-| `zIndex`            | `number`                       | `20`    | Canvas z-index                     |
-| `classNames`        | `string`                       | —       | Canvas class                       |
-| `styles`            | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles               |
-| `skipGreeting`      | `boolean`                      | `false` | Disable console greeting           |
+| Field              | Type                           | Default | Notes                            |
+| ------------------ | ------------------------------ | ------- | -------------------------------- |
+| `container`        | `HTMLElement`                  | —       | Positioning host for the canvas  |
+| `offset`           | `number`                       | `5`     | Outward offset of the ring in px |
+| `outerWidth`       | `number`                       | `45`    | Outer noise ribbon half-width    |
+| `rgbWidth`         | `number`                       | `11`    | RGB-split ribbon half-width      |
+| `fragmentCount`    | `number`                       | `130`   | Data-fragment particle count     |
+| `burstIntervalMin` | `number`                       | `900`   | Min burst interval in ms         |
+| `burstIntervalMax` | `number`                       | `2600`  | Max burst interval in ms         |
+| `burstDuration`    | `number`                       | `140`   | Burst duration in ms             |
+| `pathSamples`      | `number`                       | `500`   | Outline sample count             |
+| `speed`            | `number`                       | `1`     | Global time scale                |
+| `cornerSegments`   | `number`                       | `22`    | Corner sampling segments         |
+| `zIndex`           | `number`                       | `20`    | Canvas z-index                   |
+| `classNames`       | `string`                       | —       | Canvas class                     |
+| `styles`           | `Partial<CSSStyleDeclaration>` | —       | Canvas inline styles             |
+| `skipGreeting`     | `boolean`                      | `false` | Disable console greeting         |
 
 Canvas mounts on `container` or `document.body` and fills that view. Supports `start()` / `pause()` / `dispose()` / `setTarget` / `setContainer`.
 

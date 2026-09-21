@@ -7,19 +7,19 @@
 
 给 Agent UI 用的零依赖特效库。
 
-| API            | 效果                 | 典型场景                 |
-| -------------- | -------------------- | ------------------------ |
-| `aura.glow`    | 彩色流光遮罩         | 工作台、对话框、卡片高亮 |
-| `aura.border`  | 圆角卡片外的神经光场 | 思考中 / 推理中 / 活跃态 |
-| `aura.fire`    | 沿 DOM 边框燃烧      | 危险 / 执行中 / 点火态   |
-| `aura.burning` | 大火 + 烟雾 + 热浪   | 超频 / 燃烧寿命          |
-| `aura.shape`   | WebGL2 形状感知光带  | 圆形 / 胶囊 / 多边形     |
-| `aura.water`   | WebGL2 形状感知水流  | 流式输出 / 思考中 / 液态 |
-| `aura.cultivation` | WebGL2 金色修仙灵气 | 修仙 UI / 角色面板 / 悟道 |
-| `aura.demonic` | WebGL2 紫黑魔气      | 暴走 / 禁术 / 危险过载     |
-| `aura.thunder`  | 雷劫电弧           | 极限推理 / 渡劫 / 超频思考 |
-| `aura.void`     | 黑洞虚空光带       | 深渊 / 过载 / 事件视界     |
-| `aura.glitch`   | RGB 撕裂故障崩坏   | 崩溃 / 重试 / 系统异常     |
+| API                | 效果                 | 典型场景                   |
+| ------------------ | -------------------- | -------------------------- |
+| `aura.glow`        | 彩色流光遮罩         | 工作台、对话框、卡片高亮   |
+| `aura.border`      | 圆角卡片外的神经光场 | 思考中 / 推理中 / 活跃态   |
+| `aura.fire`        | 沿 DOM 边框燃烧      | 危险 / 执行中 / 点火态     |
+| `aura.burning`     | 大火 + 烟雾 + 热浪   | 超频 / 燃烧寿命            |
+| `aura.shape`       | WebGL2 形状感知光带  | 圆形 / 胶囊 / 多边形       |
+| `aura.water`       | WebGL2 形状感知水流  | 流式输出 / 思考中 / 液态   |
+| `aura.cultivation` | WebGL2 金色修仙灵气  | 修仙 UI / 角色面板 / 悟道  |
+| `aura.demonic`     | WebGL2 紫黑魔气      | 暴走 / 禁术 / 危险过载     |
+| `aura.thunder`     | 雷劫电弧             | 极限推理 / 渡劫 / 超频思考 |
+| `aura.void`        | 黑洞虚空光带         | 深渊 / 过载 / 事件视界     |
+| `aura.glitch`      | RGB 撕裂故障崩坏     | 崩溃 / 重试 / 系统异常     |
 
 ✨ **[在线演示](https://wangmiaozero.github.io/agent-aura/)** · **[API 文档](./docs/api.zh-CN.md)**
 
@@ -35,6 +35,33 @@ Node.js 18+（Node 24 可用）。`glow` / `border` / `fire` / `burning` / `thun
 
 ```ts
 import { aura } from 'agent-aura'
+```
+
+## 推荐：只导入你用到的特效
+
+生产项目请用子路径导入：
+
+```ts
+import { fire } from 'agent-aura/fire'
+
+const fx = fire('#agent')
+```
+
+这样不会把 water / thunder / void / glitch 等无关特效打进业务包。详见 [导入策略](./docs/imports.zh-CN.md)。
+
+全量便利 API 适合 Demo / 快速开发 / 对体积不敏感的项目：
+
+```ts
+import { aura } from 'agent-aura'
+
+aura.fire('#agent')
+```
+
+低频状态可以动态加载：
+
+```ts
+const { glitch } = await import('agent-aura/glitch')
+glitch('#crash')
 ```
 
 ## 快速开始
@@ -215,7 +242,19 @@ aura.glitch('#crash', { container: '#stage' })
 也可以自己接管 DOM。`attach()` 仍负责挂载和启动。`new Glow()` / `new FireBorder()` **不会**。
 
 ```ts
-import { BurningFire, CultivationAura, DemonicAura, FireBorder, GlitchAura, Glow, MotionBorder, ShapeAura, ThunderAura, VoidAura, WaterAura } from 'agent-aura'
+import {
+    BurningFire,
+    CultivationAura,
+    DemonicAura,
+    FireBorder,
+    GlitchAura,
+    Glow,
+    MotionBorder,
+    ShapeAura,
+    ThunderAura,
+    VoidAura,
+    WaterAura,
+} from 'agent-aura'
 
 const fx = FireBorder.attach('#card', { particleCount: 800 })
 MotionBorder.attach('#card', { container: '#stage' })
@@ -250,7 +289,7 @@ npm run build  # 压缩 ESM + IIFE + 类型
 npm start      # 用 ./build/*.js 打开 index.html
 ```
 
-`index.html` 是目录页。每种特效单独一页（`glow.html`、`shape.html` 等），构建后引入 `./build/index.js`。
+`index.html` 是目录页。每种特效单独一页（`glow.html`、`shape.html` 等），构建后引入 `./build/index.js`。子路径产物在 `build/fire/index.js`、`build/glitch/index.js` 等。
 
 ## 发布
 

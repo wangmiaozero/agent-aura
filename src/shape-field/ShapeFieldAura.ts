@@ -27,11 +27,7 @@ import lineFrag from './shaders/line.frag.glsl'
 import lineVert from './shaders/line.vert.glsl'
 import pointFrag from './shaders/point.frag.glsl'
 import pointVert from './shaders/point.vert.glsl'
-import {
-	type ShapeFieldMode,
-	SHAPE_FIELD_THEMES,
-	lerpRgb,
-} from './themes'
+import { SHAPE_FIELD_THEMES, type ShapeFieldMode, lerpRgb } from './themes'
 
 export type { ShapeFieldMode }
 
@@ -262,7 +258,13 @@ export class ShapeFieldAura {
 		this.detailAlpha = detailAlpha
 		this.detailColor = detailColor
 
-		this.bindPointVao(this.fieldVao, this.fieldPos, this.fieldSize, this.fieldAlpha, this.fieldColor)
+		this.bindPointVao(
+			this.fieldVao,
+			this.fieldPos,
+			this.fieldSize,
+			this.fieldAlpha,
+			this.fieldColor
+		)
 		this.bindPointVao(
 			this.detailVao,
 			this.detailPos,
@@ -518,10 +520,30 @@ export class ShapeFieldAura {
 			gl.uniform2f(this.uLineRes, view.width, view.height)
 			gl.uniform1f(this.uLineTime, t)
 			gl.uniform1f(this.uLineMode, theme.modeId)
-			gl.uniform3f(this.uLineColor1, theme.lineColors[0][0], theme.lineColors[0][1], theme.lineColors[0][2])
-			gl.uniform3f(this.uLineColor2, theme.lineColors[1][0], theme.lineColors[1][1], theme.lineColors[1][2])
-			gl.uniform3f(this.uLineColor3, theme.lineColors[2][0], theme.lineColors[2][1], theme.lineColors[2][2])
-			gl.uniform3f(this.uLineColor4, theme.lineColors[3][0], theme.lineColors[3][1], theme.lineColors[3][2])
+			gl.uniform3f(
+				this.uLineColor1,
+				theme.lineColors[0][0],
+				theme.lineColors[0][1],
+				theme.lineColors[0][2]
+			)
+			gl.uniform3f(
+				this.uLineColor2,
+				theme.lineColors[1][0],
+				theme.lineColors[1][1],
+				theme.lineColors[1][2]
+			)
+			gl.uniform3f(
+				this.uLineColor3,
+				theme.lineColors[2][0],
+				theme.lineColors[2][1],
+				theme.lineColors[2][2]
+			)
+			gl.uniform3f(
+				this.uLineColor4,
+				theme.lineColors[3][0],
+				theme.lineColors[3][1],
+				theme.lineColors[3][2]
+			)
 			const breath = 0.85 + Math.sin(t * 1.3) * 0.1
 			for (const layer of this.layers) {
 				if (layer.count < 2) continue

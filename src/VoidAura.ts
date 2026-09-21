@@ -102,7 +102,11 @@ const MIST_C2: [number, number, number] = [0.3647, 0.0745, 0.5647]
 const SPARK_C1: [number, number, number] = [0.4, 0.1255, 1]
 const SPARK_C2: [number, number, number] = [0.9529, 0.6902, 1]
 
-function lerpColor(a: [number, number, number], b: [number, number, number], t: number): [number, number, number] {
+function lerpColor(
+	a: [number, number, number],
+	b: [number, number, number],
+	t: number
+): [number, number, number] {
 	return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
 }
 
@@ -627,8 +631,10 @@ export class VoidAura {
 			const normalOffset = p.offset + wave1 * p.swirl
 			const tangentOffset = wave2 * 15
 			const inwardPull = -Math.abs(wave3) * 14
-			positions[i * 2] = info.point.x + info.normal.x * (normalOffset + inwardPull) + info.tangent.x * tangentOffset
-			positions[i * 2 + 1] = info.point.y + info.normal.y * (normalOffset + inwardPull) + info.tangent.y * tangentOffset
+			positions[i * 2] =
+				info.point.x + info.normal.x * (normalOffset + inwardPull) + info.tangent.x * tangentOffset
+			positions[i * 2 + 1] =
+				info.point.y + info.normal.y * (normalOffset + inwardPull) + info.tangent.y * tangentOffset
 			sizes[i] = p.size * (0.7 + (wave2 * 0.5 + 0.5) * 0.5)
 			alphas[i] = p.alpha * (0.48 + (wave1 * 0.5 + 0.5) * 0.52)
 			const c = lerpColor(MIST_C1, MIST_C2, wave3 * 0.5 + 0.5)

@@ -17,9 +17,10 @@ npm start
 
 ## Scripts
 
-- `npm run build` — minified ESM (`build/index.js`) + IIFE (`build/agent-aura.min.js`) + d.ts
+- `npm run build` — multi-entry ESM (`build/index.js`, `build/fire/index.js`, …) + IIFE (`build/agent-aura.min.js`) + d.ts
 - `npm start` — serve `index.html`, which imports `./build/index.js`
-- `npm run build:demo` — copy HTML + compressed JS for GitHub Pages
+- `npm run build:demo` — copy HTML + JS tree for GitHub Pages
+- `npm run check` — subpath exports, bundle size, tree-shake, `npm pack --dry-run`
 - `npm run typecheck`
 - `npm run lint`
 

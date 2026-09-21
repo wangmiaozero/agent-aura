@@ -4,7 +4,14 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig([
-	globalIgnores(['build/*', 'build-demo/*', 'node_modules', 'src/**/__*.ts', 'src/legacy/**']),
+	globalIgnores([
+		'build/*',
+		'build-demo/*',
+		'tmp/*',
+		'node_modules',
+		'src/**/__*.ts',
+		'src/legacy/**',
+	]),
 	js.configs.recommended,
 	{
 		files: ['**/*.ts'],

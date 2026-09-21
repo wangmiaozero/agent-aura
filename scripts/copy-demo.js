@@ -33,8 +33,16 @@ for (const file of htmlFiles) {
 	cpSync(join(root, file), join(dest, file))
 }
 
-for (const file of readdirSync(buildDir)) {
-	if (file.endsWith('.js')) {
-		cpSync(join(buildDir, file), join(dest, 'build', file))
+function copyJsTree(from, to) {
+	for (const name of readdirSync(from, { withFileTypes: true })) {
+		const src = join(from, name.name)
+		const dst = join(to, name.name)
+		if (name.isDirectory()) copyJsTree(src, dst)
+		else if (name.name.endsWith('.js')) {
+			mkdirSync(dirname(dst), { recursive: true })
+			cpSync(src, dst)
+		}
 	}
 }
+
+copyJsTree(buildDir, join(dest, 'build'))
