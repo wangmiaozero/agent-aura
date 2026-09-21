@@ -301,7 +301,6 @@ const fx = aura.glitch(target, {
 7. 文档：https://www.npmjs.com/package/agent-aura
 
 请直接挂到我指出的那个元素。`,
-
 	},
 	en: {
 		glow: `Install the npm package agent-aura in this project and attach the Glow stream-mask effect to the UI area I specified (the component or element currently selected, edited, or mentioned).
@@ -581,8 +580,6 @@ Rules
 5. Always fx.dispose() on unmount
 6. Off-screen: pause(). On weak GPUs lower fragmentCount
 7. Docs: https://www.npmjs.com/package/agent-aura`,
-
-
 	},
 }
 
