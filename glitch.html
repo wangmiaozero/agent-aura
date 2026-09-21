@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" data-i18n-page="home">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agent Aura · Glitch</title>
+		<link rel="stylesheet" href="./site.css" />
+		<style>
+			.figure-stage {
+				background: radial-gradient(circle at 50% 42%, #15151b 0%, #09090d 42%, #020203 100%);
+			}
+			.figure {
+				background: radial-gradient(circle, #303039, #15151a 66%, #08080a);
+				color: #f1f1f5;
+				border-color: rgba(255, 255, 255, 0.08);
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="nav">
+			<a class="brand" href="./index.html">Agent Aura</a>
+			<div class="links">
+				<a href="./index.html" data-i18n="nav.demo">Demos</a>
+				<a href="./docs.html" data-i18n="nav.api">API</a>
+				<button type="button" data-lang-toggle>中文</button>
+			</div>
+		</nav>
+		<main class="demo-wrap">
+			<header class="demo-head">
+				<div class="tag" data-i18n="home.glitchTag">System Collapse · RGB Tear</div>
+				<h1 data-i18n="home.glitchTitle">GLITCH AURA</h1>
+				<p data-i18n="home.glitchDesc">
+					RGB split, digital tears, edge dropouts, and data fragments along the outline. Follows border-radius / clip-path.
+				</p>
+			</header>
+			<div class="figure-grid">
+				<div class="figure-stage" id="glitch-circle-stage">
+					<div class="figure is-circle" id="glitch-circle">
+						<span class="figure-label" data-i18n="demo.overclock">Overclock</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="glitch-hex-stage">
+					<div class="figure is-hex" id="glitch-hex">ERR</div>
+				</div>
+				<div class="figure-stage" id="glitch-pill-stage">
+					<div class="figure is-pill" id="glitch-pill">
+						<span class="figure-label" data-i18n="demo.thinking">Thinking</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="glitch-card-stage">
+					<div class="figure is-card" id="glitch-card">
+						<span class="figure-label" data-i18n="demo.executing">Executing</span>
+					</div>
+				</div>
+				<div class="figure-stage" id="glitch-diamond-stage">
+					<div class="figure is-diamond" id="glitch-diamond">//</div>
+				</div>
+				<div class="figure-stage" id="glitch-shield-stage">
+					<div class="figure is-shield" id="glitch-shield">
+						<span class="figure-label" data-i18n="demo.danger">Danger</span>
+					</div>
+				</div>
+			</div>
+			<p class="copy-hint" data-build-hint data-i18n="copy.hint">
+				Edit the prompt (selector, area, options), then copy it for Cursor / Claude.
+			</p>
+			<div class="prompt-block">
+				<div class="prompt-head">
+					<strong data-i18n="copy.block.glitch">Glitch · for AI: install and attach to an element</strong>
+					<div class="prompt-actions">
+						<button type="button" class="prompt-reset" data-reset-prompt="glitch" data-i18n="copy.reset">Reset</button>
+						<button type="button" class="copy-prompt" data-copy-prompt="glitch">
+							<span data-copy-label data-i18n="copy.prompt">Copy AI prompt</span>
+						</button>
+					</div>
+				</div>
+				<textarea data-prompt-preview="glitch" spellcheck="false" rows="12"></textarea>
+			</div>
+		</main>
+		<script type="module">
+			import { bootDemo } from './demo-boot.js'
+			bootDemo((aura) => {
+				const light = { fragmentCount: 64, skipGreeting: true }
+				aura.glitch('#glitch-circle', { container: '#glitch-circle-stage' })
+				aura.glitch('#glitch-hex', { container: '#glitch-hex-stage', offset: 6, ...light })
+				aura.glitch('#glitch-pill', { container: '#glitch-pill-stage', offset: 5, ...light })
+				aura.glitch('#glitch-card', { container: '#glitch-card-stage', offset: 5, ...light })
+				aura.glitch('#glitch-diamond', { container: '#glitch-diamond-stage', offset: 5, ...light })
+				aura.glitch('#glitch-shield', { container: '#glitch-shield-stage', offset: 6, ...light })
+			})
+		</script>
+	</body>
+</html>
