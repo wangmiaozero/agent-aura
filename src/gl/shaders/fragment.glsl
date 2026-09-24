@@ -150,7 +150,8 @@ void main() {
 	vec2 halfSize = size * 0.5;
 
 	// Calculate the signed distance from the rounded rectangle
-	float dBorderBox = sdRoundedBox(centeredPos, halfSize, uBorderRadius);
+	float radius = min(uBorderRadius, min(halfSize.x, halfSize.y));
+	float dBorderBox = sdRoundedBox(centeredPos, halfSize, radius);
 	float border = aaStep(0.0, dBorderBox);
 
 	// This will create a gradient mask to safely fade out from borders to inner edges.

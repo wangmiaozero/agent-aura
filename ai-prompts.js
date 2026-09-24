@@ -1,4 +1,4 @@
-import { detectLang, messages } from './i18n.js'
+import { detectLang, t } from './i18n.js'
 
 export const aiPrompts = {
 	zh: {
@@ -709,15 +709,15 @@ export function initCopyPromptButtons() {
 				return
 			}
 			const lang = detectLang()
-			const done = messages[lang]?.['copy.done'] || 'Copied'
-			const label = messages[lang]?.['copy.prompt'] || 'Copy AI prompt'
+			const done = t('copy.done', lang)
+			const label = t('copy.prompt', lang)
 			btn.classList.add('is-copied')
 			const textEl = btn.querySelector('[data-copy-label]')
 			if (textEl) textEl.textContent = done
 			else btn.textContent = done
 			window.setTimeout(() => {
 				btn.classList.remove('is-copied')
-				const restored = messages[detectLang()]?.['copy.prompt'] || label
+				const restored = t('copy.prompt', detectLang())
 				if (textEl) textEl.textContent = restored
 				else btn.textContent = restored
 			}, 1600)

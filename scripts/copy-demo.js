@@ -13,6 +13,7 @@ const htmlFiles = [
 	'index.html',
 	'docs.html',
 	'i18n.js',
+	'i18n',
 	'ai-prompts.js',
 	'site.css',
 	'demo-boot.js',
@@ -30,7 +31,7 @@ const htmlFiles = [
 ]
 
 for (const file of htmlFiles) {
-	cpSync(join(root, file), join(dest, file))
+	cpSync(join(root, file), join(dest, file), { recursive: true })
 }
 
 function copyJsTree(from, to) {

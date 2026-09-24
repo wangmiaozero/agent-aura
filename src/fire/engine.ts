@@ -7,7 +7,7 @@
  */
 import { greet } from '../brand'
 import { GlowQuad } from './glow'
-import { type BorderBounds, emptyBounds, mix, readBorderBounds } from './math'
+import { type BorderBounds, type FireOutline, emptyBounds, mix, readBorderBounds, readFireOutline } from './math'
 import { ParticleLayer } from './particles'
 import fireFrag from './shaders/fire.frag.glsl'
 import glowFrag from './shaders/glow.frag.glsl'
@@ -70,6 +70,7 @@ export class FireEngine {
 	private fireData: FireParticle[] = []
 	private smokeData: SmokeParticle[] = []
 	private bounds: BorderBounds = emptyBounds()
+	private outline: FireOutline | null = null
 	private running = false
 	private disposed = false
 	private rafId: number | null = null
@@ -252,20 +253,22 @@ export class FireEngine {
 				width: view.width * 0.8,
 				height: view.height * 0.64,
 			}
+			this.outline = null
 			return
 		}
 		this.bounds = readBorderBounds(source, view, this.options.padding)
+		this.outline = readFireOutline(source, view, this.options.padding)
 	}
 
 	private seedParticles(initial: boolean): void {
 		this.fireData = []
 		for (let i = 0; i < this.options.particleCount; i++) {
-			this.writeFire(i, resetFireParticle(this.options.preset, this.bounds, initial))
+			this.writeFire(i, resetFireParticle(this.options.preset, this.bounds, initial, this.outline))
 		}
 		this.smokeData = []
 		if (this.smoke) {
 			for (let i = 0; i < this.options.smokeCount; i++) {
-				this.writeSmoke(i, resetSmokeParticle(this.bounds, initial))
+				this.writeSmoke(i, resetSmokeParticle(this.bounds, initial, this.outline))
 			}
 		}
 	}
@@ -293,7 +296,7 @@ export class FireEngine {
 			const p = this.fireData[i]
 			p.life -= delta
 			if (p.life <= 0) {
-				this.writeFire(i, resetFireParticle(preset, this.bounds, false))
+				this.writeFire(i, resetFireParticle(preset, this.bounds, false, this.outline))
 				continue
 			}
 
@@ -356,7 +359,7 @@ export class FireEngine {
 				const s = this.smokeData[i]
 				s.life -= delta
 				if (s.life <= 0) {
-					this.writeSmoke(i, resetSmokeParticle(this.bounds, false))
+					this.writeSmoke(i, resetSmokeParticle(this.bounds, false, this.outline))
 					continue
 				}
 				const age = 1 - s.life / s.maxLife

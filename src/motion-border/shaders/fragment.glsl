@@ -45,7 +45,8 @@ void main() {
 	vec2 p = pixel - uResolution * 0.5;
 	vec2 halfCard = uCardSize * 0.5;
 
-	float d = sdRoundBox(p, halfCard, uRadius);
+	float radius = min(uRadius, min(halfCard.x, halfCard.y));
+	float d = sdRoundBox(p, halfCard, radius);
 	float dist = abs(d);
 
 	float aa = max(fwidth(d), 0.8);

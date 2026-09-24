@@ -1,5 +1,5 @@
 import { initCopyPromptButtons } from './ai-prompts.js'
-import { detectLang, initI18n, messages } from './i18n.js'
+import { detectLang, initI18n, t } from './i18n.js'
 
 export async function bootDemo(attach) {
 	initI18n()
@@ -10,6 +10,6 @@ export async function bootDemo(attach) {
 	} catch (error) {
 		console.error(error)
 		const hint = document.querySelector('[data-build-hint]')
-		if (hint) hint.textContent = messages[detectLang()]['home.buildHint']
+		if (hint) hint.textContent = t('home.buildHint', detectLang())
 	}
 }

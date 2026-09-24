@@ -6,6 +6,8 @@
  * @repository https://github.com/wangmiaozero/agent-aura
  */
 
+import { buildPathData, createTargetPath, getPointOnPath, type PathData } from '../thunder/path'
+
 export type FireSide = 'top' | 'right' | 'bottom' | 'left'
 
 export type BorderBounds = {
@@ -23,6 +25,12 @@ export type BorderPoint = {
 	normalX: number
 	normalY: number
 	side: FireSide
+}
+
+export type FireOutline = {
+	viewHeight: number
+	path: PathData
+	clockwise: boolean
 }
 
 export function rand(min: number, max: number): number {
@@ -58,11 +66,65 @@ export function readBorderBounds(
 	}
 }
 
-export function randomBorderPoint(bounds: BorderBounds, preset: 'border' | 'burning'): BorderPoint {
-	if (preset === 'burning') {
-		return burningBorderPoint(bounds)
+export function readFireOutline(
+	target: HTMLElement,
+	view: { height: number; left: number; top: number },
+	padding: number
+): FireOutline {
+	const path = createTargetPath(target, view.left, view.top, padding, 8)
+	let area = 0
+	for (let i = 0; i < path.length; i++) {
+		const a = path[i]
+		const b = path[(i + 1) % path.length]
+		area += a.x * b.y - b.x * a.y
 	}
+	return { viewHeight: view.height, path: buildPathData(path), clockwise: area >= 0 }
+}
+
+export function randomBorderPoint(
+	bounds: BorderBounds,
+	preset: 'border' | 'burning',
+	outline?: FireOutline | null
+): BorderPoint {
+	if (outline && outline.path.total > 0) return shapeBorderPoint(outline, preset)
+	if (preset === 'burning') return burningBorderPoint(bounds)
 	return evenBorderPoint(bounds)
+}
+
+function shapeBorderPoint(outline: FireOutline, preset: 'border' | 'burning'): BorderPoint {
+	let point = pointOnOutline(outline, Math.random())
+	if (preset === 'burning') {
+		for (let i = 0; i < 6; i++) {
+			const next = pointOnOutline(outline, Math.random())
+			const weight = next.side === 'top' ? 2.2 : next.side === 'bottom' ? 0.6 : 0.8
+			if (Math.random() < weight / 2.2) {
+				point = next
+				break
+			}
+		}
+	}
+	return point
+}
+
+function pointOnOutline(outline: FireOutline, t: number): BorderPoint {
+	const sample = getPointOnPath(outline.path, t)
+	let nx = sample.tangent.y
+	let ny = -sample.tangent.x
+	if (!outline.clockwise) {
+		nx = -nx
+		ny = -ny
+	}
+	const normalX = nx
+	const normalY = -ny
+	const side: FireSide =
+		Math.abs(normalY) >= Math.abs(normalX) ? (normalY >= 0 ? 'top' : 'bottom') : normalX >= 0 ? 'right' : 'left'
+	return {
+		x: sample.point.x,
+		y: outline.viewHeight - sample.point.y,
+		normalX,
+		normalY,
+		side,
+	}
 }
 
 function evenBorderPoint(b: BorderBounds): BorderPoint {

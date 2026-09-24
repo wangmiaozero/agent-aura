@@ -5,7 +5,7 @@
  * @license MIT
  * @repository https://github.com/wangmiaozero/agent-aura
  */
-import { type BorderBounds, type FireSide, mix, rand, randomBorderPoint } from './math'
+import { type BorderBounds, type FireOutline, type FireSide, mix, rand, randomBorderPoint } from './math'
 
 export type FirePreset = 'border' | 'burning'
 
@@ -38,13 +38,20 @@ export type SmokeParticle = {
 export function resetFireParticle(
 	preset: FirePreset,
 	bounds: BorderBounds,
-	initial: boolean
+	initial: boolean,
+	outline?: FireOutline | null
 ): FireParticle {
-	return preset === 'burning' ? resetBurningFire(bounds, initial) : resetBorderFire(bounds, initial)
+	return preset === 'burning'
+		? resetBurningFire(bounds, initial, outline)
+		: resetBorderFire(bounds, initial, outline)
 }
 
-export function resetSmokeParticle(bounds: BorderBounds, initial: boolean): SmokeParticle {
-	const p = randomBorderPoint(bounds, 'burning')
+export function resetSmokeParticle(
+	bounds: BorderBounds,
+	initial: boolean,
+	outline?: FireOutline | null
+): SmokeParticle {
+	const p = randomBorderPoint(bounds, 'burning', outline)
 	const maxLife = rand(1.0, 2.6)
 	return {
 		x: p.x + rand(-14, 14),
@@ -117,8 +124,12 @@ export function writeFireColor(
 	colors[index * 3 + 2] = b
 }
 
-function resetBorderFire(bounds: BorderBounds, initial: boolean): FireParticle {
-	const point = randomBorderPoint(bounds, 'border')
+function resetBorderFire(
+	bounds: BorderBounds,
+	initial: boolean,
+	outline?: FireOutline | null
+): FireParticle {
+	const point = randomBorderPoint(bounds, 'border', outline)
 	const spark = Math.random() < 0.12
 	const particle: FireParticle = {
 		x: point.x + rand(-2, 2),
@@ -155,8 +166,12 @@ function resetBorderFire(bounds: BorderBounds, initial: boolean): FireParticle {
 	return particle
 }
 
-function resetBurningFire(bounds: BorderBounds, initial: boolean): FireParticle {
-	const p = randomBorderPoint(bounds, 'burning')
+function resetBurningFire(
+	bounds: BorderBounds,
+	initial: boolean,
+	outline?: FireOutline | null
+): FireParticle {
+	const p = randomBorderPoint(bounds, 'burning', outline)
 	const spark = Math.random() < 0.17
 	const particle: FireParticle = {
 		x: p.x + rand(-3, 3),

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-i18n-page="home">
+<html lang="en" data-i18n-page="home" data-i18n-title="page.void.title">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,7 +22,12 @@
 			<div class="links">
 				<a href="./index.html" data-i18n="nav.demo">Demos</a>
 				<a href="./docs.html" data-i18n="nav.api">API</a>
-				<button type="button" data-lang-toggle>中文</button>
+				<select data-lang-select aria-label="Language">
+					<option value="en">EN</option>
+					<option value="zh">中文</option>
+					<option value="ja">日本語</option>
+					<option value="ko">한국어</option>
+				</select>
 			</div>
 		</nav>
 		<main class="demo-wrap">
@@ -40,7 +45,7 @@
 					</div>
 				</div>
 				<div class="figure-stage" id="void-hex-stage">
-					<div class="figure is-hex" id="void-hex">VOID</div>
+					<div class="figure is-hex" id="void-hex" data-i18n="demo.glyph.void">VOID</div>
 				</div>
 				<div class="figure-stage" id="void-pill-stage">
 					<div class="figure is-pill" id="void-pill">
