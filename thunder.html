@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-i18n-page="home">
+<html lang="en" data-i18n-page="home" data-i18n-title="page.thunder.title">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,7 +22,12 @@
 			<div class="links">
 				<a href="./index.html" data-i18n="nav.demo">演示</a>
 				<a href="./docs.html" data-i18n="nav.api">API</a>
-				<button type="button" data-lang-toggle>中文</button>
+				<select data-lang-select aria-label="Language">
+					<option value="en">EN</option>
+					<option value="zh">中文</option>
+					<option value="ja">日本語</option>
+					<option value="ko">한국어</option>
+				</select>
 			</div>
 		</nav>
 		<main class="demo-wrap">
@@ -35,10 +40,10 @@
 			</header>
 			<div class="figure-grid">
 				<div class="figure-stage" id="jie-shield-stage">
-					<div class="figure is-shield" id="jie-shield">劫</div>
+					<div class="figure is-shield" id="jie-shield" data-i18n="demo.glyph.tribulation">劫</div>
 				</div>
 				<div class="figure-stage" id="jie-hex-stage">
-					<div class="figure is-hex" id="jie-hex">雷</div>
+					<div class="figure is-hex" id="jie-hex" data-i18n="demo.glyph.bolt">雷</div>
 				</div>
 				<div class="figure-stage" id="jie-circle-stage">
 					<div class="figure is-circle" id="jie-circle">
@@ -56,7 +61,7 @@
 					</div>
 				</div>
 				<div class="figure-stage" id="jie-diamond-stage">
-					<div class="figure is-diamond" id="jie-diamond">闪</div>
+					<div class="figure is-diamond" id="jie-diamond" data-i18n="demo.glyph.flash">闪</div>
 				</div>
 			</div>
 			<p class="copy-hint" data-build-hint data-i18n="copy.hint">

@@ -1,8 +1,8 @@
-/*! agent-aura v1.1.0 | MIT | https://github.com/wangmiaozero/agent-aura */
+/*! agent-aura v1.1.1 | MIT | https://github.com/wangmiaozero/agent-aura */
 //#region src/brand.ts
 var e = !1;
 function t(t = "agent-aura") {
-	e || (e = !0, console.log(`%c✨ ${t} 1.1.0 ✨`, "background: linear-gradient(90deg, #39b6ff, #bd45fb, #ff5733, #ff7b22); color: white; text-shadow: 0 0 2px rgba(0, 0, 0, 0.2); font-weight: bold; font-size: 1em; padding: 2px 12px; border-radius: 6px;"));
+	e || (e = !0, console.log(`%c✨ ${t} 1.1.1 ✨`, "background: linear-gradient(90deg, #39b6ff, #bd45fb, #ff5733, #ff7b22); color: white; text-shadow: 0 0 2px rgba(0, 0, 0, 0.2); font-weight: bold; font-size: 1em; padding: 2px 12px; border-radius: 6px;"));
 }
 //#endregion
 //#region src/dom.ts

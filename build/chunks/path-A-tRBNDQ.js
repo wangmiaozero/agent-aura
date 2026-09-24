@@ -1,4 +1,4 @@
-/*! agent-aura v1.1.0 | MIT | https://github.com/wangmiaozero/agent-aura */
+/*! agent-aura v1.1.1 | MIT | https://github.com/wangmiaozero/agent-aura */
 //#region src/thunder/path.ts
 function e(e, t, n) {
 	return Math.max(t, Math.min(n, e));

@@ -1,22 +1,22 @@
-/*! agent-aura v1.1.0 | MIT | https://github.com/wangmiaozero/agent-aura */
-import { t as e } from "./ShapeFieldAura-CtbAAVWa.js";
-//#region src/DemonicAura.ts
+/*! agent-aura v1.1.1 | MIT | https://github.com/wangmiaozero/agent-aura */
+import { t as e } from "./ShapeFieldAura-BrNfReT_.js";
+//#region src/WaterAura.ts
 var t = class extends e {
 	static attach(t, n = {}) {
 		return e.attach(t, {
 			...n,
-			mode: "demonic"
+			mode: "water"
 		});
 	}
 	constructor(e = {}) {
 		super({
 			...e,
-			mode: "demonic"
+			mode: "water"
 		});
 	}
 };
 //#endregion
-//#region src/entries/demonic.ts
+//#region src/entries/water.ts
 function n(e, n) {
 	return t.attach(e, n);
 }
