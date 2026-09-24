@@ -3,7 +3,7 @@ import { n as e, t } from "./chunks/border-CNYS7ggk.js";
 import { t as n } from "./chunks/ShapeFieldAura-BrNfReT_.js";
 import { n as r, t as i } from "./chunks/cultivation-DTfijbvU.js";
 import { n as a, t as o } from "./chunks/demonic-cR2YRH8A.js";
-import { i as s, n as c, r as l, t as u } from "./chunks/fire-CqdUxgtK.js";
+import { i as s, n as c, r as l, t as u } from "./chunks/fire-Ckbi3232.js";
 import { n as d, t as f } from "./chunks/glitch-DrzAaoeE.js";
 import { n as p, t as m } from "./chunks/glow-Bqot1gNC.js";
 import { n as h, t as g } from "./chunks/shape-BYdhfhz2.js";
